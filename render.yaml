@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: bioguard-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt && cd backend && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: cd backend && gunicorn config.wsgi:application
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: PYTHON_VERSION
+        value: "3.10"
+      - key: SECRET_KEY
+        generateValue: true
+
+  - type: web
+    name: bioguard-frontend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://bioguard-backend.onrender.com
