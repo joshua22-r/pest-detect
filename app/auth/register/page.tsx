@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Spinner } from '@/components/ui/spinner';
 
 export default function RegisterPage() {
+  const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,12 +36,16 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      await register(email, password, name);
+      const nameParts = name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      await register(username, email, password, firstName, lastName);
       toast({
         title: 'Registration successful',
         description: 'Welcome to PlantGuard!',
       });
-      router.push('/');
+      // Redirection is now handled in the auth context
     } catch (error) {
       toast({
         title: 'Registration failed',
@@ -61,6 +66,20 @@ export default function RegisterPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <Input
+              type="text"
+              placeholder="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              disabled={isLoading}
+              required
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Full Name

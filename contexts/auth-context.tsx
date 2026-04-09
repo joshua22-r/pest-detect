@@ -39,6 +39,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const userData = await apiClient.getCurrentUser();
           setProfile(userData);
           setUser(userData.user);
+
+          // Redirect admin users to admin dashboard
+          if (userData.user_type === 'admin' && window.location.pathname !== '/admin/dashboard') {
+            // Small delay to ensure state is updated before navigation
+            setTimeout(() => {
+              window.location.href = '/admin/dashboard';
+            }, 100);
+            return;
+          }
         }
       } catch (error) {
         console.error('[v0] Failed to restore session:', error);
@@ -60,6 +69,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Fetch full profile
       const profileData = await apiClient.getCurrentUser();
       setProfile(profileData);
+
+      // Redirect based on user type
+      if (profileData.user_type === 'admin') {
+        // Small delay to ensure state is updated before navigation
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard';
+        }, 100);
+        return;
+      } else {
+        // Redirect farmers to predict dashboard
+        setTimeout(() => {
+          window.location.href = '/predict';
+        }, 100);
+        return;
+      }
     } catch (error) {
       console.error('[v0] Login error:', error);
       throw error instanceof Error ? error : new Error((error as any)?.message || 'Login failed');
@@ -76,6 +100,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Fetch full profile
       const profileData = await apiClient.getCurrentUser();
       setProfile(profileData);
+
+      // Redirect based on user type
+      if (profileData.user_type === 'admin') {
+        // Small delay to ensure state is updated before navigation
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard';
+        }, 100);
+        return;
+      } else {
+        // Redirect farmers to predict dashboard
+        setTimeout(() => {
+          window.location.href = '/predict';
+        }, 100);
+        return;
+      }
     } catch (error) {
       console.error('[v0] Registration error:', error);
       throw error instanceof Error ? error : new Error((error as any)?.message || 'Registration failed');

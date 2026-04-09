@@ -232,7 +232,8 @@ class APIClient {
   }
 
   async getCurrentUser(): Promise<UserProfile> {
-    return this.request<UserProfile>('/auth/user/');
+    const response = await this.request<{ user: any; profile: UserProfile }>('/auth/user/');
+    return response.profile;
   }
 
   private async refreshToken(refreshToken: string): Promise<void> {
@@ -305,6 +306,26 @@ class APIClient {
     return this.request<any[]>('/admin/users/');
   }
 
+  async createAdminUser(data: any): Promise<any> {
+    return this.request<any>('/admin/users/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateAdminUser(id: string, data: any): Promise<any> {
+    return this.request<any>(`/admin/users/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteAdminUser(id: string): Promise<void> {
+    return this.request<void>(`/admin/users/${id}/`, {
+      method: 'DELETE',
+    });
+  }
+
   // Disease methods
   async getPlantDiseases(): Promise<any[]> {
     return this.request<any[]>('/diseases/plant_diseases/');
@@ -335,6 +356,71 @@ class APIClient {
   async deleteDisease(id: string): Promise<void> {
     return this.request<void>(`/diseases/${id}/`, {
       method: 'DELETE',
+    });
+  }
+
+  // Trial and Subscription Methods
+  async getTrialStatus(): Promise<any> {
+    return this.request<any>('/trial/status/');
+  }
+
+  async incrementTrialAttempts(): Promise<any> {
+    return this.request<any>('/trial/increment/', {
+      method: 'POST',
+    });
+  }
+
+  async checkCanPredict(): Promise<any> {
+    return this.request<any>('/predict/check/');
+  }
+
+  async createSubscription(data: {
+    plan: 'daily' | 'weekly' | 'monthly';
+    payment_method: 'mtn' | 'airtel';
+    mobile_number: string;
+  }): Promise<any> {
+    return this.request<any>('/subscriptions/create/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async confirmPayment(data: {
+    payment_id: string;
+    transaction_id?: string;
+  }): Promise<any> {
+    return this.request<any>('/subscriptions/confirm-payment/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getSubscriptions(): Promise<any[]> {
+    return this.request<any[]>('/subscriptions/');
+  }
+
+  // Admin methods
+  async getAdminPayments(status?: string): Promise<any[]> {
+    const url = status ? `/admin/payments/?status=${status}` : '/admin/payments/';
+    return this.request<any[]>(url);
+  }
+
+  async getAdminSubscriptions(filters?: {
+    status?: string;
+    paid?: boolean;
+  }): Promise<any[]> {
+    let url = '/admin/subscriptions/';
+    const params = new URLSearchParams();
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.paid !== undefined) params.append('paid', String(filters.paid));
+    if (params.toString()) url += `?${params.toString()}`;
+    return this.request<any[]>(url);
+  }
+
+  async allowUserAccess(userId: number, allow: boolean): Promise<any> {
+    return this.request<any>('/admin/allow-access/', {
+      method: 'POST',
+      body: JSON.stringify({ user_id: userId, allow }),
     });
   }
 }

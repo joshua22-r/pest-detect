@@ -14,8 +14,24 @@ from django.contrib.auth.models import User
 
 # Create superuser
 if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+    admin_user = User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+    UserProfile.objects.create(user=admin_user, user_type='admin')
     print("✓ Created superuser: admin / admin123")
+
+# Create requested admin user
+if not User.objects.filter(username='josh').exists():
+    josh_user = User.objects.create_user(
+        'josh',
+        'joshuajessey3@gmai.com',
+        'changme@1',
+        first_name='Josh',
+        last_name='Jessey'
+    )
+    josh_user.is_staff = True
+    josh_user.is_superuser = True
+    josh_user.save()
+    UserProfile.objects.create(user=josh_user, user_type='admin')
+    print("✓ Created admin user: josh / changme@1")
 
 # Create plants
 plants_data = [

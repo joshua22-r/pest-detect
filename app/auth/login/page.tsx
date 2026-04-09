@@ -28,7 +28,7 @@ export default function LoginPage() {
         title: 'Login successful',
         description: 'Welcome back!',
       });
-      router.push('/');
+      // Redirection is now handled in the auth context
     } catch (error) {
       console.error('[v0] Login error:', error);
       const message = error instanceof Error ? error.message : (typeof error === 'object' && error !== null ? JSON.stringify(error) : 'Please check your credentials');

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import (
     Plant, Animal, Disease, DetectionResult, 
-    UserProfile, SystemStatistics
+    UserProfile, SystemStatistics, Trial, Subscription, Payment
 )
 
 
@@ -10,6 +10,23 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
+
+class AdminUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['user_type']
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    profile = AdminUserProfileSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'email', 'first_name', 'last_name',
+            'is_active', 'is_staff', 'is_superuser', 'profile'
+        ]
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -83,4 +100,34 @@ class SystemStatisticsSerializer(serializers.ModelSerializer):
         fields = [
             'total_scans', 'total_users', 'plant_scans', 
             'animal_scans', 'diseases_detected', 'updated_at'
+        ]
+
+
+class TrialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trial
+        fields = ['id', 'user', 'attempts_used', 'max_attempts', 'status', 'created_at', 'updated_at']
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    
+    class Meta:
+        model = Subscription
+        fields = [
+            'id', 'user', 'username', 'user_email', 'plan', 'status', 'payment_method',
+            'mobile_number', 'amount', 'start_date', 'end_date', 'is_paid', 'created_at', 'updated_at'
+        ]
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    
+    class Meta:
+        model = Payment
+        fields = [
+            'id', 'subscription', 'user', 'username', 'user_email', 'amount',
+            'payment_method', 'mobile_number', 'status', 'transaction_id', 'created_at', 'updated_at'
         ]
