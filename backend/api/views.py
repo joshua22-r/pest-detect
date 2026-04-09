@@ -22,6 +22,17 @@ from .ml_detector import MockMLDetector
 from .permissions import IsOwnerOrReadOnly, IsAdminUser
 
 
+# Health Check View
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health_check(request):
+    """Health check endpoint for Render"""
+    return Response({
+        'status': 'healthy',
+        'message': 'Pest Detect Backend is running',
+    })
+
+
 # Authentication Views
 @api_view(['POST'])
 @permission_classes([AllowAny])
