@@ -65,19 +65,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const response = await apiClient.login(username, password);
+      console.log('[Auth] Login response:', response);
       setUser(response.user);
+      
       // Fetch full profile
       const profileData = await apiClient.getCurrentUser();
+      console.log('[Auth] Profile data:', profileData);
       setProfile(profileData);
 
       // Redirect based on user type
       if (profileData.user_type === 'admin') {
+        console.log('[Auth] Redirecting admin to dashboard');
         // Small delay to ensure state is updated before navigation
         setTimeout(() => {
           window.location.href = '/admin/dashboard';
         }, 100);
         return;
       } else {
+        console.log('[Auth] Redirecting farmer to predict page');
         // Redirect farmers to predict dashboard
         setTimeout(() => {
           window.location.href = '/predict';
@@ -85,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
     } catch (error) {
-      console.error('[v0] Login error:', error);
+      console.error('[Auth] Login error:', error);
       throw error instanceof Error ? error : new Error((error as any)?.message || 'Login failed');
     } finally {
       setIsLoading(false);
