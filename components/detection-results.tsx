@@ -110,7 +110,7 @@ export function DetectionResults({
         <Card className="p-6 bg-blue-50 border-l-4 border-l-blue-600">
           <div className="flex items-start gap-3 mb-3">
             <Zap className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-            <h3 className="text-lg font-semibold text-gray-900">Recommended {isPlant ? 'Treatment' : 'Veterinary Care'}</h3>
+            <h3 className="text-lg font-semibold text-gray-900">What to do next</h3>
           </div>
           <div className="bg-white p-4 rounded border border-blue-200">
             <p className="text-gray-700">{result.treatment}</p>

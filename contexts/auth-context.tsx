@@ -100,26 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (username: string, email: string, password: string, first_name?: string, last_name?: string) => {
     setIsLoading(true);
     try {
-      const response = await apiClient.register(username, email, password, first_name, last_name);
-      setUser(response.user);
-      // Fetch full profile
-      const profileData = await apiClient.getCurrentUser();
-      setProfile(profileData);
-
-      // Redirect based on user type
-      if (profileData.user_type === 'admin') {
-        // Small delay to ensure state is updated before navigation
-        setTimeout(() => {
-          window.location.href = '/admin/dashboard';
-        }, 100);
-        return;
-      } else {
-        // Redirect farmers to predict dashboard
-        setTimeout(() => {
-          window.location.href = '/predict';
-        }, 100);
-        return;
-      }
+      await apiClient.register(username, email, password, first_name, last_name, false);
     } catch (error) {
       console.error('[v0] Registration error:', error);
       throw error instanceof Error ? error : new Error((error as any)?.message || 'Registration failed');

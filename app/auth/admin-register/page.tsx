@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -9,8 +9,9 @@ import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Spinner } from '@/components/ui/spinner';
+import { apiClient } from '@/lib/api-client';
 
-export default function RegisterPage() {
+export default function AdminRegisterPage() {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,8 +19,14 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { register } = useAuth();
+  const { profile, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (!authLoading && profile?.user_type !== 'admin') {
+      router.push('/auth/login');
+    }
+  }, [authLoading, profile, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,29 +34,34 @@ export default function RegisterPage() {
     if (password !== confirmPassword) {
       toast({
         title: 'Passwords do not match',
-        description: 'Please ensure both passwords are the same',
+        description: 'Please enter the same password twice.',
         variant: 'destructive',
       });
       return;
     }
 
+    const nameParts = name.trim().split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
     setIsLoading(true);
 
     try {
-      const nameParts = name.trim().split(' ');
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-      
-      await register(username, email, password, firstName, lastName);
+      await apiClient.createAdminUser(username, email, password, firstName, lastName);
       toast({
-        title: 'Registration successful',
-        description: 'Please sign in to continue',
+        title: 'Admin account created',
+        description: 'The new admin user has been registered successfully.',
       });
-      router.push('/auth/login');
+      setUsername('');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      router.push('/admin/dashboard');
     } catch (error) {
       toast({
-        title: 'Registration failed',
-        description: error instanceof Error ? error.message : 'Please try again',
+        title: 'Admin registration failed',
+        description: error instanceof Error ? error.message : 'Unable to create admin user.',
         variant: 'destructive',
       });
     } finally {
@@ -57,22 +69,31 @@ export default function RegisterPage() {
     }
   };
 
+  if (authLoading || (!profile && typeof window !== 'undefined')) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50 px-4">
+        <div className="text-center">
+          <Spinner className="mx-auto mb-4" />
+          <p className="text-gray-600">Verifying access...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-50 px-4">
-      <Card className="w-full max-w-md p-8 shadow-lg">
+      <Card className="w-full max-w-xl p-8 shadow-lg">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-green-700 mb-2">PlantGuard</h1>
-          <p className="text-gray-600">Create your account</p>
+          <h1 className="text-3xl font-bold text-green-700 mb-2">Admin Signup</h1>
+          <p className="text-gray-600">Create a hidden admin account.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <Input
               type="text"
-              placeholder="username"
+              placeholder="admin username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={isLoading}
@@ -81,26 +102,21 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
             <Input
               type="text"
-              placeholder="John Farmer"
+              placeholder="Admin Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={isLoading}
-              required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <Input
               type="email"
-              placeholder="you@example.com"
+              placeholder="admin@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
@@ -109,9 +125,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <Input
               type="password"
               placeholder="••••••••"
@@ -123,9 +137,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
             <Input
               type="password"
               placeholder="••••••••"
@@ -136,27 +148,23 @@ export default function RegisterPage() {
             />
           </div>
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white"
-          >
+          <Button type="submit" disabled={isLoading} className="w-full bg-green-600 hover:bg-green-700 text-white">
             {isLoading ? (
               <>
                 <Spinner className="mr-2" />
-                Creating account...
+                Creating admin...
               </>
             ) : (
-              'Sign Up'
+              'Create Admin'
             )}
           </Button>
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-gray-600 text-sm">
-            Already have an account?{' '}
+          <p className="text-sm text-gray-600">
+            Admin login is unchanged.{' '}
             <Link href="/auth/login" className="text-green-600 hover:text-green-700 font-medium">
-              Sign in
+              Go to login
             </Link>
           </p>
         </div>

@@ -176,7 +176,10 @@ class MockMLDetector:
             'Anthracnose': 'Apply copper-based fungicide. Remove and destroy infected fruit/leaves. Improve drainage. Avoid overhead watering.',
             'Downy Mildew': 'Apply metalaxyl or mefenoxam fungicide. Ensure good drainage. Remove infected leaves. Improve air circulation and reduce humidity.',
         }
-        return treatments.get(disease_name, 'Consult with local agricultural extension service for specific treatment recommendations.')
+        return treatments.get(
+            disease_name,
+            'If this crop is not listed, keep your field clean, remove damaged leaves, and talk with a local agriculture officer for the best spray and timing.'
+        )
     
     @staticmethod
     def get_plant_prevention(disease_name: str) -> str:
@@ -189,7 +192,10 @@ class MockMLDetector:
             'Anthracnose': 'Use resistant varieties. Practice crop rotation. Maintain clean tools. Remove infected plant material immediately. Ensure proper drainage.',
             'Downy Mildew': 'Improve air circulation. Reduce humidity through proper ventilation. Use resistant varieties. Avoid overhead irrigation. Remove affected plants early.',
         }
-        return prevention.get(disease_name, 'Implement good cultural practices: crop rotation, proper spacing, sanitation, and resistant varieties.')
+        return prevention.get(
+            disease_name,
+            'If not listed, keep plants healthy with good spacing, clean water, clean soil, and choose strong seeds. Watch plants often and remove anything that looks sick.'
+        )
     
     @staticmethod
     def get_animal_treatment(disease_name: str) -> str:
@@ -203,7 +209,10 @@ class MockMLDetector:
             'Coccidiosis': 'Administer anticoccidial medication (amprolium, sulfamethoxazole). Ensure clean water and feed. Improve sanitation. May use preventive medications in young animals.',
             'Bloat': 'EMERGENCY treatment required. Contact veterinarian immediately. May need trocar puncture or decompression. Provide mineral oil or probiotics. Monitor closely for shock.',
         }
-        return treatments.get(disease_name, 'Consult with veterinarian for proper diagnosis and treatment plan.')
+        return treatments.get(
+            disease_name,
+            'If not listed, keep animals clean, feed them well, check them every day, and call your local vet for the best treatment plan.'
+        )
     
     @staticmethod
     def get_animal_prevention(disease_name: str) -> str:
@@ -217,7 +226,10 @@ class MockMLDetector:
             'Coccidiosis': 'Maintain excellent sanitation. Avoid overcrowding. Provide clean water and feed. Use bedding management to reduce moisture. Implement preventative medication protocols for young stock.',
             'Bloat': 'Provide gradual diet changes. Avoid feeding on wet pasture. Ensure proper pasture variety. Provide bloat drench before grazing. Monitor animals closely. Avoid overeating concentrated feeds.',
         }
-        return prevention.get(disease_name, 'Implement good management practices: proper nutrition, hygiene, regular monitoring, and stress reduction.')
+        return prevention.get(
+            disease_name,
+            'If this is not listed, keep animals clean, feed them well, separate sick animals, and contact your local vet or animal health officer for advice.'
+        )
     
     @staticmethod
     def detect(image_file, subject_type: str) -> dict:

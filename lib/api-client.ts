@@ -186,7 +186,8 @@ class APIClient {
     email: string,
     password: string,
     first_name?: string,
-    last_name?: string
+    last_name?: string,
+    autoLogin: boolean = false
   ): Promise<AuthResponse> {
     const response = await this.request<AuthResponse>('/auth/register/', {
       method: 'POST',
@@ -199,8 +200,33 @@ class APIClient {
       }),
     });
 
-    this.setTokens(response.access, response.refresh);
+    if (autoLogin) {
+      this.setTokens(response.access, response.refresh);
+    }
     return response;
+  }
+
+  async createAdminUser(payload: {
+    username: string;
+    email: string;
+    password: string;
+    first_name?: string;
+    last_name?: string;
+    user_type?: string;
+    is_staff?: boolean;
+  }): Promise<any> {
+    return this.request('/admin/users/', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: payload.username,
+        email: payload.email,
+        password: payload.password,
+        first_name: payload.first_name || '',
+        last_name: payload.last_name || '',
+        user_type: payload.user_type || 'admin',
+        is_staff: payload.is_staff ?? true,
+      }),
+    });
   }
 
   async login(username: string, password: string): Promise<AuthResponse> {
