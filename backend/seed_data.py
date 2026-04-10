@@ -31,7 +31,7 @@ if not User.objects.filter(username='josh').exists():
     josh_user.is_superuser = True
     josh_user.save()
     UserProfile.objects.create(user=josh_user, user_type='admin')
-    print("✓ Created admin user: josh / changme@1")
+    print("✓ Created admin user: josh / changeme@1")
 
 # Create plants
 plants_data = [
