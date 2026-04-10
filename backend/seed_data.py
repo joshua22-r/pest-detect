@@ -9,7 +9,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from api.models import Plant, Animal, Disease
+from api.models import Plant, Animal, Disease, UserProfile
 from django.contrib.auth.models import User
 
 # Create superuser
@@ -20,18 +20,15 @@ if not User.objects.filter(username='admin').exists():
 
 # Create requested admin user
 if not User.objects.filter(username='josh').exists():
-    josh_user = User.objects.create_user(
+    josh_user = User.objects.create_superuser(
         'josh',
-        'joshuajessey3@gmai.com',
-        'changme@1',
+        'joshuajessey3@gmail.com',
+        'changeme@1',
         first_name='Josh',
         last_name='Jessey'
     )
-    josh_user.is_staff = True
-    josh_user.is_superuser = True
-    josh_user.save()
     UserProfile.objects.create(user=josh_user, user_type='admin')
-    print("✓ Created admin user: josh / changme@1")
+    print("✓ Created admin user: josh / changeme@1")
 
 # Create plants
 plants_data = [
