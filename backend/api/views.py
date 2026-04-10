@@ -18,7 +18,7 @@ from .serializers import (
     DetectionResultSerializer, DetectionResultCreateSerializer,
     SystemStatisticsSerializer, TrialSerializer, SubscriptionSerializer, PaymentSerializer
 )
-from .ml_detector import MockMLDetector
+from .ml_detector import MockMLDetector, RealMLDetector
 from .permissions import IsOwnerOrReadOnly, IsAdminUser
 
 
@@ -194,9 +194,10 @@ def predict(request):
             )
         
         image_file = request.FILES['image']
+        mode = request.data.get('mode', 'real')
         
-        # Run ML detection
-        detection_result = MockMLDetector.detect(image_file, subject_type)
+        # Run ML detection with selected mode
+        detection_result = MockMLDetector.detect(image_file, subject_type, mode)
         
         # Save detection result to database
         result = DetectionResult.objects.create(
@@ -209,6 +210,7 @@ def predict(request):
             severity=detection_result['severity'],
             treatment=detection_result['treatment'],
             prevention=detection_result['prevention'],
+            notes=detection_result.get('notes', ''),
         )
         
         # Update user profile scan count

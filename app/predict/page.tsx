@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { TrialButton } from '@/components/trial-button';
 import { SubscriptionModal } from '@/components/subscription-modal';
-import { Leaf, LogIn } from 'lucide-react';
+import { Leaf, LogIn, Lock } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 import Link from 'next/link';
 
@@ -17,6 +17,7 @@ const MAX_DEMO_TRIALS = 5;
 
 export default function PredictPage() {
   const [subjectType, setSubjectType] = useState<SubjectType>('plant');
+  const [modelMode, setModelMode] = useState<'mock' | 'real'>('real');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [result, setResult] = useState<DetectionResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -139,6 +140,9 @@ export default function PredictPage() {
           subjectType: type,
           treatment: mockResult.treatment,
           prevention: mockResult.prevention,
+          notes: type === 'plant'
+            ? 'This is a sample result. The image shows possible disease symptoms and the system gives a simple diagnosis.'
+            : 'This is a sample result. The image shows possible animal health symptoms and the system gives a simple diagnosis.',
           affectedPlants: type === 'plant' ? ['Various plants'] : [],
           affectedAnimals: type === 'animal' ? ['Various animals'] : [],
           timestamp: new Date().toISOString(),
@@ -181,7 +185,7 @@ export default function PredictPage() {
       setIsAnalyzing(true);
 
       // Call real API
-      const result = await apiClient.predict(file, type);
+      const result = await apiClient.predict(file, type, modelMode);
 
       // Increment trial attempts if using trial
       if (accessCheck.has_trial_access) {
@@ -202,6 +206,7 @@ export default function PredictPage() {
         subjectType: result.subject_type,
         treatment: result.treatment,
         prevention: result.prevention,
+        notes: result.notes || '',
         affectedPlants: result.subject_type === 'plant' ? ['Various plants'] : [],
         affectedAnimals: result.subject_type === 'animal' ? ['Various animals'] : [],
         timestamp: result.created_at,
@@ -319,15 +324,36 @@ export default function PredictPage() {
           {/* Left Column - Upload */}
           <div>
             <Card className="p-6 shadow-lg">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">
-                {subjectType === 'plant' ? 'Upload Plant Image' : 'Upload Livestock Photo'}
-              </h2>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {subjectType === 'plant' ? 'Upload Plant Image' : 'Upload Livestock Photo'}
+                </h2>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="modelMode" className="text-sm font-medium text-slate-700">
+                    Mode:
+                  </label>
+                  <select
+                    id="modelMode"
+                    value={modelMode}
+                    onChange={(event) => setModelMode(event.target.value as 'mock' | 'real')}
+                    className="rounded border border-slate-300 px-2 py-1 text-sm"
+                  >
+                    <option value="real">Real trained mode</option>
+                    <option value="mock">Standard mode</option>
+                  </select>
+                </div>
+              </div>
               <ImageUpload
                 onImageSelect={handleImageSelect}
                 isLoading={isAnalyzing}
                 subjectType={subjectType}
                 onSubjectTypeChange={setSubjectType}
               />
+              <p className="mt-3 text-sm text-gray-500">
+                {modelMode === 'real'
+                  ? 'Using the trained detection mode when available.'
+                  : 'Using the standard detection mode.'}
+              </p>
 
               {isAnalyzing && (
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">

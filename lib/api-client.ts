@@ -273,10 +273,15 @@ class APIClient {
   }
 
   // Prediction/Detection methods
-  async predict(image: File, subjectType: 'plant' | 'animal'): Promise<DetectionResponse> {
+  async predict(
+    image: File,
+    subjectType: 'plant' | 'animal',
+    mode: 'mock' | 'real' = 'real'
+  ): Promise<DetectionResponse> {
     const formData = new FormData();
     formData.append('image', image);
     formData.append('subject_type', subjectType);
+    formData.append('mode', mode);
 
     return this.request<DetectionResponse>('/predict/', {
       method: 'POST',

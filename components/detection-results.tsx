@@ -83,6 +83,14 @@ export function DetectionResults({
           </p>
         )}
 
+        {/* Analysis Feedback */}
+        {result.notes && (
+          <div className="mb-6 p-4 bg-slate-50 rounded border border-slate-200">
+            <p className="text-sm font-medium text-slate-900 mb-2">What this means</p>
+            <p className="text-gray-700">{result.notes}</p>
+          </div>
+        )}
+
         {/* Affected Items */}
         {!isHealthy && (
           <div className="pt-4 border-t">
