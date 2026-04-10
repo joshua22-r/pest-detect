@@ -9,7 +9,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from api.models import Plant, Animal, Disease
+from api.models import Plant, Animal, Disease, UserProfile
 from django.contrib.auth.models import User
 
 # Create superuser
@@ -23,7 +23,7 @@ if not User.objects.filter(username='josh').exists():
     josh_user = User.objects.create_user(
         'josh',
         'joshuajessey3@gmai.com',
-        'changme@1',
+        'changeme@1',
         first_name='Josh',
         last_name='Jessey'
     )
