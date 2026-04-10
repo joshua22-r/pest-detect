@@ -9,7 +9,11 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-chang
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1,pest-detect-backend.onrender.com',
+    cast=lambda v: [s.strip() for s in v.split(',')],
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -110,6 +114,11 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'https://pest-detect-ab6c.vercel.app',
+    'https://pest-detect-ab6c-4bq993gox-joshus-projects-d1e30b03.vercel.app',
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://.*\.vercel\.app$',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
