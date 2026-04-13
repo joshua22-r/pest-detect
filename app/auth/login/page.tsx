@@ -47,6 +47,19 @@ export default function LoginPage() {
     setSocialLoading(provider);
     try {
       if (provider === 'google') {
+        const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
+        // Check if Google Client ID is properly configured
+        if (!googleClientId || googleClientId.includes('your-google') || googleClientId.length < 20) {
+          toast({
+            title: 'Google Sign-In not configured',
+            description: 'Please configure NEXT_PUBLIC_GOOGLE_CLIENT_ID in your environment variables',
+            variant: 'destructive',
+          });
+          setSocialLoading(null);
+          return;
+        }
+
         // Initialize Google Identity Services
         if (!window.google) {
           // Load Google Identity Services script if not loaded
@@ -61,7 +74,7 @@ export default function LoginPage() {
 
         // Initialize Google Sign-In
         window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || 'your-google-client-id',
+          client_id: googleClientId,
           callback: async (response: any) => {
             try {
               // Send the ID token to backend
