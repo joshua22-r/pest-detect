@@ -454,6 +454,48 @@ class APIClient {
       body: JSON.stringify({ user_id: userId, allow }),
     });
   }
+
+  // Password Reset methods
+  async requestPasswordReset(email: string): Promise<{ message: string }> {
+    return this.request<{ message: string }>('/auth/password-reset/', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  async confirmPasswordReset(
+    token: string,
+    newPassword: string
+  ): Promise<{ message: string }> {
+    return this.request<{ message: string }>('/auth/password-reset-confirm/', {
+      method: 'POST',
+      body: JSON.stringify({ token, new_password: newPassword }),
+    });
+  }
+
+  // Social Login methods
+  async socialLogin(
+    provider: 'google' | 'facebook',
+    token: string,
+    tokenType: 'access_token' | 'id_token' | 'credential' = 'access_token'
+  ): Promise<AuthResponse> {
+    const data: any = { provider };
+    if (tokenType === 'credential') {
+      data.credential = token; // Google Identity Services sends ID token as 'credential'
+    } else if (tokenType === 'id_token') {
+      data.id_token = token;
+    } else {
+      data.access_token = token;
+    }
+
+    const response = await this.request<AuthResponse>('/auth/social-login/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    this.setTokens(response.access, response.refresh);
+    return response;
+  }
 }
 
 export const apiClient = new APIClient();

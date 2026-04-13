@@ -5,6 +5,7 @@ Run: python manage.py shell < seed_data.py
 """
 import os
 import django
+from decouple import config
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
@@ -12,18 +13,22 @@ django.setup()
 from api.models import Plant, Animal, Disease, UserProfile
 from django.contrib.auth.models import User
 
-# Create superuser
+# Create superuser with environment variable defaults
 if not User.objects.filter(username='admin').exists():
-    admin_user = User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+    admin_user = User.objects.create_superuser(
+        'admin',
+        config('ADMIN_EMAIL', default='admin@example.com'),
+        config('ADMIN_PASSWORD', default='ChangeMe@12345')
+    )
     UserProfile.objects.create(user=admin_user, user_type='admin')
-    print("✓ Created superuser: admin / admin123")
+    print("✓ Created superuser: admin (password from ADMIN_PASSWORD env var)")
 
-# Create requested admin user
+# Create additional admin user if name provided
 if not User.objects.filter(username='josh').exists():
     josh_user = User.objects.create_user(
         'josh',
-        'joshuajessey3@gmai.com',
-        'changeme@1',
+        config('JOSH_EMAIL', default='josh@example.com'),
+        config('JOSH_PASSWORD', default='ChangeMe@12345'),
         first_name='Josh',
         last_name='Jessey'
     )
@@ -31,7 +36,7 @@ if not User.objects.filter(username='josh').exists():
     josh_user.is_superuser = True
     josh_user.save()
     UserProfile.objects.create(user=josh_user, user_type='admin')
-    print("✓ Created admin user: josh / changeme@1")
+    print("✓ Created admin user: josh (password from JOSH_PASSWORD env var)")
 
 # Create plants
 plants_data = [

@@ -1,0 +1,279 @@
+INFO 2026-04-11 11:16:02,411 autoreload 9656 2948 Watching for file changes with StatReloader
+INFO 2026-04-11 11:20:20,829 autoreload 7212 12724 Watching for file changes with StatReloader
+INFO 2026-04-11 11:20:46,917 autoreload 9656 2948 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:20:46,974 autoreload 7212 12724 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:20:55,474 autoreload 11132 9040 Watching for file changes with StatReloader
+INFO 2026-04-11 11:20:55,732 autoreload 3448 6760 Watching for file changes with StatReloader
+INFO 2026-04-11 11:20:55,857 autoreload 11232 6700 Watching for file changes with StatReloader
+INFO 2026-04-11 11:20:56,546 autoreload 13116 12980 Watching for file changes with StatReloader
+INFO 2026-04-11 11:21:22,146 autoreload 3448 6760 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:21:22,166 autoreload 11232 6700 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:21:22,171 autoreload 11132 9040 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:21:22,223 autoreload 13116 12980 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:21:37,514 autoreload 2636 4684 Watching for file changes with StatReloader
+INFO 2026-04-11 11:21:37,568 autoreload 15188 8068 Watching for file changes with StatReloader
+INFO 2026-04-11 11:21:37,575 autoreload 12712 1296 Watching for file changes with StatReloader
+INFO 2026-04-11 11:21:39,140 autoreload 12108 13672 Watching for file changes with StatReloader
+INFO 2026-04-11 11:22:14,050 autoreload 10308 8172 Watching for file changes with StatReloader
+INFO 2026-04-11 11:24:00,011 autoreload 12108 13672 C:\Users\joshu\Desktop\pest detect\backend\api\middleware.py changed, reloading.
+INFO 2026-04-11 11:24:00,746 autoreload 10308 8172 C:\Users\joshu\Desktop\pest detect\backend\api\middleware.py changed, reloading.
+INFO 2026-04-11 11:24:13,056 autoreload 9176 3284 Watching for file changes with StatReloader
+INFO 2026-04-11 11:24:13,112 autoreload 7320 3672 Watching for file changes with StatReloader
+INFO 2026-04-11 11:25:22,623 autoreload 9352 2704 Watching for file changes with StatReloader
+INFO 2026-04-11 11:25:42,332 autoreload 7320 3672 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 11:25:43,538 autoreload 9352 2704 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 11:25:43,841 autoreload 9176 3284 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 11:25:49,316 autoreload 11976 5844 Watching for file changes with StatReloader
+INFO 2026-04-11 11:25:49,505 autoreload 13216 1508 Watching for file changes with StatReloader
+INFO 2026-04-11 11:25:50,082 autoreload 13368 1136 Watching for file changes with StatReloader
+INFO 2026-04-11 11:31:31,147 autoreload 13216 1508 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 11:31:31,193 autoreload 2636 4684 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:31:31,320 autoreload 12712 1296 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:31:31,343 autoreload 13368 1136 C:\Users\joshu\Desktop\pest detect\backend\api\middleware.py changed, reloading.
+INFO 2026-04-11 11:31:31,480 autoreload 11976 5844 C:\Users\joshu\Desktop\pest detect\backend\api\middleware.py changed, reloading.
+INFO 2026-04-11 11:31:31,663 autoreload 15188 8068 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:31:38,868 autoreload 4888 7940 Watching for file changes with StatReloader
+INFO 2026-04-11 11:31:38,918 autoreload 4240 1836 Watching for file changes with StatReloader
+INFO 2026-04-11 11:31:40,719 autoreload 844 8144 Watching for file changes with StatReloader
+INFO 2026-04-11 11:31:41,423 autoreload 8492 14300 Watching for file changes with StatReloader
+INFO 2026-04-11 11:31:41,678 autoreload 5272 15172 Watching for file changes with StatReloader
+INFO 2026-04-11 11:31:42,193 autoreload 1940 8508 Watching for file changes with StatReloader
+INFO 2026-04-11 11:37:25,077 autoreload 8492 14300 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:37:25,362 autoreload 4888 7940 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:37:26,340 autoreload 4240 1836 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:37:26,830 autoreload 844 8144 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 11:37:28,118 autoreload 5272 15172 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 13:03:10,684 autoreload 12512 16352 Watching for file changes with StatReloader
+INFO 2026-04-11 13:29:36,468 autoreload 9540 11160 Watching for file changes with StatReloader
+ERROR 2026-04-11 13:32:08,926 log 9540 4176 Service Unavailable: /
+WARNING 2026-04-11 13:32:10,267 log 9540 15480 Not Found: /favicon.ico
+INFO 2026-04-11 16:37:21,353 autoreload 17264 17256 Watching for file changes with StatReloader
+ERROR 2026-04-11 17:01:05,923 log 17264 15528 Internal Server Error: /api/auth/login/
+Traceback (most recent call last):
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 264, in connect
+    sock = self.retry.call_with_retry(
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\retry.py", line 46, in call_with_retry
+    return do()
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 265, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 627, in _connect
+    raise err
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 615, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\sentry_sdk\integrations\django\views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django_ratelimit\decorators.py", line 19, in _wrapped
+    ratelimited = is_ratelimited(request=request, group=group, fn=fn,
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django_ratelimit\core.py", line 153, in is_ratelimited
+    usage = get_usage(request, group, fn, key, rate, method, increment)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django_ratelimit\core.py", line 231, in get_usage
+    added = cache.add(cache_key, initial_value, period + EXPIRATION_FUDGE)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\cache\backends\redis.py", line 183, in add
+    return self._cache.add(key, value, self.get_backend_timeout(timeout))
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\cache\backends\redis.py", line 95, in add
+    return bool(client.set(key, value, ex=timeout, nx=True))
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\commands\core.py", line 2341, in set
+    return self.execute_command("SET", *pieces, **options)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\sentry_sdk\integrations\redis\__init__.py", line 235, in sentry_patched_execute_command
+    return old_execute_command(self, name, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 1086, in get_connection
+    connection.connect()
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 270, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.
+ERROR 2026-04-11 17:01:15,773 log 17264 15528 Internal Server Error: /api/auth/login/
+Traceback (most recent call last):
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 264, in connect
+    sock = self.retry.call_with_retry(
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\retry.py", line 46, in call_with_retry
+    return do()
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 265, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 627, in _connect
+    raise err
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 615, in _connect
+    sock.connect(socket_address)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\sentry_sdk\integrations\django\views.py", line 84, in sentry_wrapped_callback
+    return callback(request, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\rest_framework\decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django_ratelimit\decorators.py", line 19, in _wrapped
+    ratelimited = is_ratelimited(request=request, group=group, fn=fn,
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django_ratelimit\core.py", line 153, in is_ratelimited
+    usage = get_usage(request, group, fn, key, rate, method, increment)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django_ratelimit\core.py", line 231, in get_usage
+    added = cache.add(cache_key, initial_value, period + EXPIRATION_FUDGE)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\cache\backends\redis.py", line 183, in add
+    return self._cache.add(key, value, self.get_backend_timeout(timeout))
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\django\core\cache\backends\redis.py", line 95, in add
+    return bool(client.set(key, value, ex=timeout, nx=True))
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\commands\core.py", line 2341, in set
+    return self.execute_command("SET", *pieces, **options)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\sentry_sdk\integrations\redis\__init__.py", line 235, in sentry_patched_execute_command
+    return old_execute_command(self, name, *args, **kwargs)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 1086, in get_connection
+    connection.connect()
+  File "C:\Users\joshu\Desktop\pest detect\.venv\lib\site-packages\redis\connection.py", line 270, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.
+INFO 2026-04-11 17:01:49,370 autoreload 17264 17256 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 17:01:56,545 autoreload 3880 3756 Watching for file changes with StatReloader
+INFO 2026-04-11 17:02:37,354 autoreload 5704 13724 Watching for file changes with StatReloader
+INFO 2026-04-11 17:02:45,998 autoreload 5704 13724 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 17:02:50,729 autoreload 15796 16892 Watching for file changes with StatReloader
+INFO 2026-04-11 17:03:40,885 autoreload 15796 16892 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 17:03:48,135 autoreload 15816 15732 Watching for file changes with StatReloader
+INFO 2026-04-11 17:04:16,389 autoreload 5776 4712 Watching for file changes with StatReloader
+INFO 2026-04-11 17:05:26,139 autoreload 15816 15732 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:05:26,892 autoreload 5776 4712 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:05:42,460 autoreload 5812 136 Watching for file changes with StatReloader
+INFO 2026-04-11 17:05:42,460 autoreload 552 5144 Watching for file changes with StatReloader
+INFO 2026-04-11 17:06:02,716 autoreload 9352 1584 Watching for file changes with StatReloader
+INFO 2026-04-11 17:06:21,433 autoreload 9352 1584 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:06:31,207 autoreload 16924 9316 Watching for file changes with StatReloader
+INFO 2026-04-11 17:07:27,647 autoreload 16924 9316 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 17:07:39,780 autoreload 14348 16652 Watching for file changes with StatReloader
+INFO 2026-04-11 17:07:59,656 autoreload 14348 16652 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:08:07,882 autoreload 3348 5776 Watching for file changes with StatReloader
+INFO 2026-04-11 17:08:32,972 autoreload 3348 5776 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-11 17:08:38,563 autoreload 2084 16428 Watching for file changes with StatReloader
+INFO 2026-04-11 17:14:20,295 autoreload 2084 16428 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:14:35,071 autoreload 8584 14232 Watching for file changes with StatReloader
+INFO 2026-04-11 17:19:09,940 autoreload 8584 14232 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:19:15,814 autoreload 1312 3084 Watching for file changes with StatReloader
+INFO 2026-04-11 17:19:39,820 autoreload 1312 3084 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:19:43,477 autoreload 5372 11056 Watching for file changes with StatReloader
+INFO 2026-04-11 17:24:31,644 autoreload 5372 11056 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:24:50,762 autoreload 1424 15960 Watching for file changes with StatReloader
+ERROR 2026-04-11 17:36:48,857 views 1424 12012 Social login failed for google: 401 Client Error: Unauthorized for url: https://www.googleapis.com/oauth2/v3/userinfo
+WARNING 2026-04-11 17:36:49,743 log 1424 12012 Bad Request: /api/auth/social-login/
+INFO 2026-04-11 17:41:15,899 autoreload 1424 15960 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:41:26,022 autoreload 9824 1312 Watching for file changes with StatReloader
+INFO 2026-04-11 17:47:08,024 autoreload 8916 14196 Watching for file changes with StatReloader
+ERROR 2026-04-11 17:47:42,514 views 9824 2352 Social login failed for google: name 'settings' is not defined
+WARNING 2026-04-11 17:47:42,963 log 9824 2352 Bad Request: /api/auth/social-login/
+ERROR 2026-04-11 17:47:45,162 views 9824 16780 Social login failed for facebook: name 'settings' is not defined
+WARNING 2026-04-11 17:47:45,162 log 9824 16780 Bad Request: /api/auth/social-login/
+INFO 2026-04-11 17:48:14,250 autoreload 9824 1312 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:48:14,933 autoreload 8916 14196 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:48:18,997 autoreload 12880 14232 Watching for file changes with StatReloader
+INFO 2026-04-11 17:48:19,347 autoreload 6484 16724 Watching for file changes with StatReloader
+ERROR 2026-04-11 17:48:31,504 views 6484 16456 Social login failed for google: name 'settings' is not defined
+ERROR 2026-04-11 17:48:31,674 views 6484 16456 Traceback: Traceback (most recent call last):
+  File "C:\Users\joshu\Desktop\pest detect\backend\api\views.py", line 331, in social_login
+    if settings.DEBUG and access_token and access_token.startswith('mock_'):
+NameError: name 'settings' is not defined
+
+WARNING 2026-04-11 17:48:31,692 log 6484 16456 Bad Request: /api/auth/social-login/
+ERROR 2026-04-11 17:48:33,722 views 6484 14140 Social login failed for facebook: name 'settings' is not defined
+ERROR 2026-04-11 17:48:33,723 views 6484 14140 Traceback: Traceback (most recent call last):
+  File "C:\Users\joshu\Desktop\pest detect\backend\api\views.py", line 331, in social_login
+    if settings.DEBUG and access_token and access_token.startswith('mock_'):
+NameError: name 'settings' is not defined
+
+WARNING 2026-04-11 17:48:33,723 log 6484 14140 Bad Request: /api/auth/social-login/
+INFO 2026-04-11 17:49:10,917 autoreload 6484 16724 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:49:11,228 autoreload 12880 14232 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:49:14,672 autoreload 7500 12012 Watching for file changes with StatReloader
+INFO 2026-04-11 17:49:16,169 autoreload 16840 10144 Watching for file changes with StatReloader
+INFO 2026-04-11 17:50:23,256 autoreload 12368 6484 Watching for file changes with StatReloader
+INFO 2026-04-11 17:55:59,725 autoreload 16840 10144 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:56:08,505 autoreload 4176 8280 Watching for file changes with StatReloader
+INFO 2026-04-11 17:56:09,134 autoreload 4308 5752 Watching for file changes with StatReloader
+INFO 2026-04-11 17:57:00,187 autoreload 4176 8280 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:57:00,437 autoreload 4308 5752 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-11 17:57:04,764 autoreload 16808 6512 Watching for file changes with StatReloader
+INFO 2026-04-11 17:57:05,599 autoreload 4612 3456 Watching for file changes with StatReloader
+INFO 2026-04-12 15:23:11,892 autoreload 2188 13612 Watching for file changes with StatReloader
+WARNING 2026-04-12 15:24:30,286 log 2188 10836 Not Found: /favicon.ico
+INFO 2026-04-12 16:15:39,591 autoreload 2188 13612 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-12 16:15:45,870 autoreload 4900 13744 Watching for file changes with StatReloader
+INFO 2026-04-12 16:18:09,273 autoreload 4900 13744 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-12 16:18:12,121 autoreload 3348 12628 Watching for file changes with StatReloader
+INFO 2026-04-12 16:22:32,948 autoreload 3348 12628 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:22:39,962 autoreload 5792 8260 Watching for file changes with StatReloader
+INFO 2026-04-12 16:23:25,816 autoreload 5792 8260 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:23:39,949 autoreload 16648 16576 Watching for file changes with StatReloader
+INFO 2026-04-12 16:24:14,479 autoreload 16648 16576 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:24:23,266 autoreload 16240 12396 Watching for file changes with StatReloader
+INFO 2026-04-12 16:24:46,207 autoreload 16240 12396 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:24:50,165 autoreload 6400 14124 Watching for file changes with StatReloader
+INFO 2026-04-12 16:25:46,014 autoreload 6400 14124 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:25:49,593 autoreload 7864 10204 Watching for file changes with StatReloader
+INFO 2026-04-12 16:26:05,112 autoreload 7864 10204 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:26:09,389 autoreload 5820 9244 Watching for file changes with StatReloader
+INFO 2026-04-12 16:27:15,960 autoreload 5820 9244 C:\Users\joshu\Desktop\pest detect\backend\api\ml_detector.py changed, reloading.
+INFO 2026-04-12 16:27:21,394 autoreload 9996 16192 Watching for file changes with StatReloader
+INFO 2026-04-12 16:29:13,226 autoreload 9996 16192 C:\Users\joshu\Desktop\pest detect\backend\api\comprehensive_diseases_db.py changed, reloading.
+INFO 2026-04-12 16:29:17,205 autoreload 15936 13672 Watching for file changes with StatReloader
+INFO 2026-04-12 16:29:30,420 autoreload 15936 13672 C:\Users\joshu\Desktop\pest detect\backend\api\comprehensive_diseases_db.py changed, reloading.
+INFO 2026-04-12 16:29:34,318 autoreload 10812 10964 Watching for file changes with StatReloader
+INFO 2026-04-12 16:31:53,488 autoreload 10812 10964 C:\Users\joshu\Desktop\pest detect\backend\api\comprehensive_diseases_db.py changed, reloading.
+INFO 2026-04-12 16:32:01,984 autoreload 7528 6084 Watching for file changes with StatReloader
+INFO 2026-04-12 16:35:09,077 autoreload 7528 6084 C:\Users\joshu\Desktop\pest detect\backend\api\comprehensive_diseases_db.py changed, reloading.
+INFO 2026-04-12 16:35:21,012 autoreload 7152 13624 Watching for file changes with StatReloader
+INFO 2026-04-12 16:39:01,899 autoreload 7152 13624 C:\Users\joshu\Desktop\pest detect\backend\api\comprehensive_diseases_db.py changed, reloading.
+INFO 2026-04-12 16:39:09,421 autoreload 15936 6676 Watching for file changes with StatReloader
+INFO 2026-04-12 16:40:18,949 autoreload 15936 6676 C:\Users\joshu\Desktop\pest detect\backend\api\comprehensive_diseases_db.py changed, reloading.
+INFO 2026-04-12 16:40:26,339 autoreload 7276 2956 Watching for file changes with StatReloader
+INFO 2026-04-13 18:46:35,067 autoreload 16764 10600 Watching for file changes with StatReloader
+INFO 2026-04-13 19:14:00,103 autoreload 16764 10600 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-13 19:14:15,469 autoreload 17488 20088 Watching for file changes with StatReloader
+INFO 2026-04-13 19:20:00,592 autoreload 17488 20088 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-13 19:20:05,809 autoreload 19400 15764 Watching for file changes with StatReloader
+INFO 2026-04-13 19:21:57,573 autoreload 19400 15764 C:\Users\joshu\Desktop\pest detect\backend\api\utils.py changed, reloading.
+INFO 2026-04-13 19:22:02,837 autoreload 18480 17656 Watching for file changes with StatReloader
+INFO 2026-04-13 19:22:31,661 autoreload 18480 17656 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-13 19:22:35,871 autoreload 10624 14620 Watching for file changes with StatReloader
+INFO 2026-04-13 19:22:53,764 autoreload 10624 14620 C:\Users\joshu\Desktop\pest detect\backend\config\settings.py changed, reloading.
+INFO 2026-04-13 19:22:57,962 autoreload 19988 15464 Watching for file changes with StatReloader
+INFO 2026-04-13 19:28:08,063 autoreload 19988 15464 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-13 19:28:13,536 autoreload 14068 17452 Watching for file changes with StatReloader

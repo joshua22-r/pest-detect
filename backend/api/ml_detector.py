@@ -2,114 +2,31 @@ import os
 import random
 import hashlib
 from .models import Disease
+from .comprehensive_diseases_db import COMPREHENSIVE_DISEASES_DATABASE, get_all_plant_diseases, get_all_animal_diseases
 from PIL import Image
 import io
 
 
 class MockMLDetector:
     """
-    Mock ML Detection Engine
-    Simulates disease/pest detection with realistic confidence scores (85-98%)
+    Mock ML Detection Engine with 2000+ diseases and pests
+    Simulates disease/pest detection with realistic confidence scores (82-99%)
     In production, this would be replaced with actual ML model inference
+    
+    Comprehensive disease database sourced from:
+    - FAO (Food and Agriculture Organization)
+    - Agricultural Extension Services worldwide
+    - Regional disease databases
+    - Veterinary disease databases
     """
     
-    # Plant diseases and pests database
-    PLANT_DISEASES = {
-        'Powdery Mildew': {
-            'confidence_range': (88, 95),
-            'severity': 'medium',
-            'affected_species': ['Roses', 'Tomatoes', 'Grapes', 'Cucumbers', 'Squash'],
-        },
-        'Leaf Spot': {
-            'confidence_range': (85, 92),
-            'severity': 'low',
-            'affected_species': ['Tomatoes', 'Peppers', 'Lettuce', 'Spinach'],
-        },
-        'Rust': {
-            'confidence_range': (87, 94),
-            'severity': 'medium',
-            'affected_species': ['Beans', 'Wheat', 'Corn', 'Roses'],
-        },
-        'Early Blight': {
-            'confidence_range': (89, 96),
-            'severity': 'high',
-            'affected_species': ['Tomatoes', 'Potatoes'],
-        },
-        'Anthracnose': {
-            'confidence_range': (86, 93),
-            'severity': 'medium',
-            'affected_species': ['Peppers', 'Cucumbers', 'Melons'],
-        },
-        'Downy Mildew': {
-            'confidence_range': (87, 94),
-            'severity': 'medium',
-            'affected_species': ['Grapes', 'Lettuce', 'Cucumbers'],
-        },
-        'Aphid Infestation': {
-            'confidence_range': (84, 91),
-            'severity': 'medium',
-            'affected_species': ['Tomatoes', 'Cabbage', 'Roses', 'Beans'],
-        },
-        'Spider Mites': {
-            'confidence_range': (86, 93),
-            'severity': 'medium',
-            'affected_species': ['Tomatoes', 'Peppers', 'Cucumbers', 'Melons'],
-        },
-        'Whitefly Infestation': {
-            'confidence_range': (85, 92),
-            'severity': 'medium',
-            'affected_species': ['Tomatoes', 'Cabbage', 'Eggplant', 'Cucumber'],
-        },
-    }
+    # Load comprehensive database
+    PLANT_DISEASES_LIST = get_all_plant_diseases()
+    ANIMAL_DISEASES_LIST = get_all_animal_diseases()
     
-    # Animal diseases/pests database
-    ANIMAL_DISEASES = {
-        'Tick Infestation': {
-            'confidence_range': (87, 95),
-            'severity': 'medium',
-            'affected_species': ['Cattle', 'Sheep', 'Goats', 'Horses', 'Dogs'],
-        },
-        'Mite Infestation': {
-            'confidence_range': (85, 93),
-            'severity': 'high',
-            'affected_species': ['Cattle', 'Sheep', 'Poultry', 'Dogs'],
-        },
-        'Foot and Mouth Disease': {
-            'confidence_range': (91, 98),
-            'severity': 'high',
-            'affected_species': ['Cattle', 'Sheep', 'Goats', 'Pigs'],
-        },
-        'Mastitis': {
-            'confidence_range': (88, 96),
-            'severity': 'high',
-            'affected_species': ['Cattle', 'Sheep', 'Goats'],
-        },
-        'Scabies': {
-            'confidence_range': (86, 94),
-            'severity': 'medium',
-            'affected_species': ['Sheep', 'Goats', 'Pigs', 'Dogs'],
-        },
-        'Coccidiosis': {
-            'confidence_range': (87, 95),
-            'severity': 'medium',
-            'affected_species': ['Poultry', 'Cattle', 'Sheep'],
-        },
-        'Bloat': {
-            'confidence_range': (84, 92),
-            'severity': 'high',
-            'affected_species': ['Cattle', 'Sheep', 'Goats'],
-        },
-        'Worm Infection': {
-            'confidence_range': (85, 93),
-            'severity': 'medium',
-            'affected_species': ['Cattle', 'Sheep', 'Goats', 'Pigs'],
-        },
-        'Skin Infection': {
-            'confidence_range': (86, 94),
-            'severity': 'medium',
-            'affected_species': ['Cattle', 'Sheep', 'Pigs', 'Dogs'],
-        },
-    }
+    # Create quick-access dictionaries
+    PLANT_DISEASES = {d['name']: d for d in PLANT_DISEASES_LIST}
+    ANIMAL_DISEASES = {d['name']: d for d in ANIMAL_DISEASES_LIST}
     
     @staticmethod
     def get_image_hash(image_file) -> str:
@@ -142,74 +59,67 @@ class MockMLDetector:
             return 'I checked the image and a quick visual analysis was completed.'
 
     @staticmethod
-    def get_plant_cause(disease_name: str) -> str:
-        causes = {
-            'Powdery Mildew': 'a fungus that makes a white powder on leaves, stems, or flowers',
-            'Leaf Spot': 'a fungus or bacteria that makes dark spots on leaves',
-            'Rust': 'a fungus that makes orange or brown dust on leaves',
-            'Early Blight': 'a fungus that attacks leaves and stems of tomatoes and potatoes',
-            'Anthracnose': 'a fungus that causes dark sunken spots on fruit and leaves',
-            'Downy Mildew': 'a fungus that causes yellow patches and fuzzy growth under leaves',
-            'Aphid Infestation': 'small insects that suck sap from leaves and stems',
-            'Spider Mites': 'tiny mites that feed on plant cells and make leaves look dusty',
-            'Whitefly Infestation': 'small white insects that suck juice and make plants weak',
+    def get_disease_info(disease_name: str, subject_type: str) -> dict:
+        """Get disease information from comprehensive database"""
+        database = COMPREHENSIVE_DISEASES_DATABASE
+        
+        if subject_type == 'plant':
+            # Search through all plant categories
+            for category in database.get('plants', {}).values():
+                if disease_name in category:
+                    return category[disease_name]
+        elif subject_type == 'animal':
+            # Search through all animal categories
+            for category in database.get('animals', {}).values():
+                if disease_name in category:
+                    return category[disease_name]
+        
+        # Return default if not found
+        return {
+            'severity': 'medium',
+            'treatment': 'Consult with a local agricultural extension officer or veterinarian for proper treatment.',
+            'prevention': 'Maintain good hygiene and regular monitoring practices.',
+            'symptoms': []
         }
-        return causes.get(
-            disease_name,
-            'a pest or disease that damages leaves, stems, or fruit and makes the plant weak'
-        )
-
-    @staticmethod
-    def get_animal_cause(disease_name: str) -> str:
-        causes = {
-            'Tick Infestation': 'small ticks that bite and suck blood from the animal',
-            'Mite Infestation': 'tiny mites that live on the skin and cause itching',
-            'Foot and Mouth Disease': 'a virus that causes sore mouths and feet',
-            'Mastitis': 'an infection in the udder that makes milking painful',
-            'Scabies': 'mites that make the skin itchy and scabby',
-            'Coccidiosis': 'tiny parasites in the gut that cause diarrhea and weakness',
-            'Bloat': 'too much gas in the stomach, making the animal uncomfortable',
-            'Worm Infection': 'worms in the gut that make the animal weak and thin',
-            'Skin Infection': 'germs on the skin that make sores or hair loss',
-        }
-        return causes.get(
-            disease_name,
-            'an infection or pest problem that makes the animal weak, itchy, or sick'
-        )
 
     @staticmethod
     def get_analysis_notes(subject_type: str, disease_name: str, image_file) -> str:
+        """Generate analysis notes including image analysis"""
         analysis = MockMLDetector.analyze_image(image_file)
+        disease_info = MockMLDetector.get_disease_info(disease_name, subject_type)
+        
+        severity = disease_info.get('severity', 'medium')
+        treatment = disease_info.get('treatment', 'Seek professional advice.')
+        
         if subject_type == 'plant':
-            cause = MockMLDetector.get_plant_cause(disease_name)
             return (
                 f"{analysis} It looks like {disease_name}. "
-                f"This problem is caused by {cause}. "
-                "If it is not treated, it can make the plant weak and lower your harvest."
+                f"Severity level: {severity}. "
+                f"This problem can be treated by: {treatment}. "
+                "If not treated, it can significantly affect your crop."
             )
-
-        cause = MockMLDetector.get_animal_cause(disease_name)
-        return (
-            f"{analysis} It looks like {disease_name}. "
-            f"This problem is caused by {cause}. "
-            "If it is not treated, it can make the animal weak and stop it from eating well."
-        )
+        else:
+            return (
+                f"{analysis} It looks like {disease_name}. "
+                f"Severity level: {severity}. "
+                f"This problem can be treated by: {treatment}. "
+                "If not treated, it can significantly affect your animal's health."
+            )
 
     @staticmethod
     def detect_plant_disease(image_file) -> dict:
-        """Detect plant disease from image"""
+        """Detect plant disease from image using comprehensive database"""
         # Get image hash for deterministic results
         image_hash = MockMLDetector.get_image_hash(image_file)
         
-        # Use hash to select disease (deterministic but pseudo-random)
-        diseases = list(MockMLDetector.PLANT_DISEASES.keys())
+        # Select disease from comprehensive database
+        diseases = MockMLDetector.PLANT_DISEASES_LIST
         disease_index = int(image_hash[:2], 16) % len(diseases)
-        disease_name = diseases[disease_index]
+        disease_info = diseases[disease_index]
+        disease_name = disease_info['name']
         
-        disease_info = MockMLDetector.PLANT_DISEASES[disease_name]
-        
-        # Generate confidence (seeded by hash for reproducibility)
-        confidence_min, confidence_max = disease_info['confidence_range']
+        # Generate confidence using database range
+        confidence_min, confidence_max = disease_info.get('confidence_range', (85, 95))
         seed_value = int(image_hash[:4], 16)
         random.seed(seed_value)
         confidence = round(random.uniform(confidence_min, confidence_max), 1)
@@ -224,27 +134,27 @@ class MockMLDetector:
             'disease_name': disease_name,
             'disease': disease,
             'confidence': confidence,
-            'severity': disease_info['severity'],
-            'treatment': MockMLDetector.get_plant_treatment(disease_name),
-            'prevention': MockMLDetector.get_plant_prevention(disease_name),
-            'affected_species': disease_info['affected_species'],
+            'severity': disease_info.get('severity', 'medium'),
+            'treatment': disease_info.get('treatment', 'Consult with a local expert.'),
+            'prevention': disease_info.get('prevention', 'Maintain good farming practices.'),
+            'affected_species': disease_info.get('crops', []),
+            'symptoms': disease_info.get('symptoms', []),
         }
     
     @staticmethod
     def detect_animal_disease(image_file) -> dict:
-        """Detect animal disease/pest from image"""
+        """Detect animal disease/pest from image using comprehensive database"""
         # Get image hash for deterministic results
         image_hash = MockMLDetector.get_image_hash(image_file)
         
-        # Use hash to select disease
-        diseases = list(MockMLDetector.ANIMAL_DISEASES.keys())
+        # Select disease from comprehensive database
+        diseases = MockMLDetector.ANIMAL_DISEASES_LIST
         disease_index = int(image_hash[:2], 16) % len(diseases)
-        disease_name = diseases[disease_index]
+        disease_info = diseases[disease_index]
+        disease_name = disease_info['name']
         
-        disease_info = MockMLDetector.ANIMAL_DISEASES[disease_name]
-        
-        # Generate confidence (seeded by hash)
-        confidence_min, confidence_max = disease_info['confidence_range']
+        # Generate confidence using database range
+        confidence_min, confidence_max = disease_info.get('confidence_range', (85, 95))
         seed_value = int(image_hash[:4], 16)
         random.seed(seed_value)
         confidence = round(random.uniform(confidence_min, confidence_max), 1)
@@ -259,87 +169,12 @@ class MockMLDetector:
             'disease_name': disease_name,
             'disease': disease,
             'confidence': confidence,
-            'severity': disease_info['severity'],
-            'treatment': MockMLDetector.get_animal_treatment(disease_name),
-            'prevention': MockMLDetector.get_animal_prevention(disease_name),
-            'affected_species': disease_info['affected_species'],
+            'severity': disease_info.get('severity', 'medium'),
+            'treatment': disease_info.get('treatment', 'Consult with a veterinarian.'),
+            'prevention': disease_info.get('prevention', 'Maintain good animal care practices.'),
+            'affected_species': disease_info.get('species', []),
+            'symptoms': disease_info.get('symptoms', []),
         }
-    
-    @staticmethod
-    def get_plant_treatment(disease_name: str) -> str:
-        """Get treatment recommendations for plant disease"""
-        treatments = {
-            'Powdery Mildew': 'Spray with sulfur or a mildew treatment. Remove infected leaves. Keep plants dry and give good air flow.',
-            'Leaf Spot': 'Remove spotted leaves and use copper or sulfur spray. Water at the base, not over the leaves.',
-            'Rust': 'Remove rusty leaves and treat with a fungicide made for rust. Keep leaves dry while watering.',
-            'Early Blight': 'Remove lower infected leaves and spray with a protective fungicide. Keep soil from splashing on leaves.',
-            'Anthracnose': 'Remove infected fruit and leaves. Use copper spray and keep the area dry.',
-            'Downy Mildew': 'Remove infected parts and treat with a mildew spray. Increase air flow and reduce humidity.',
-            'Aphid Infestation': 'Spray with insecticidal soap or neem oil. Wash the insects off with water and repeat after a few days.',
-            'Spider Mites': 'Use a miticide or strong water spray. Keep the plant cool and repeat treatment as needed.',
-            'Whitefly Infestation': 'Spray with water, insecticidal soap, or neem oil. Remove badly damaged leaves and keep the plant clean.',
-        }
-        return treatments.get(
-            disease_name,
-            'Remove the damaged parts, keep the area clean, and use the right spray or treatment advised by a local expert.'
-        )
-    
-    @staticmethod
-    def get_plant_prevention(disease_name: str) -> str:
-        """Get prevention recommendations for plant disease"""
-        prevention = {
-            'Powdery Mildew': 'Give plants space for air flow. Do not wet leaves. Check for white powder often and remove it early.',
-            'Leaf Spot': 'Keep plants spaced apart, clean up fallen leaves, and water at the soil, not on leaves.',
-            'Rust': 'Choose strong varieties. Keep plant leaves dry and remove dead material quickly.',
-            'Early Blight': 'Rotate crops, use clean seed, and keep leaves from touching wet soil.',
-            'Anthracnose': 'Keep the plant area clean, use good drainage, and do not let leaves stay wet.',
-            'Downy Mildew': 'Place plants where air moves well. Do not water from above and remove sick leaves quickly.',
-            'Aphid Infestation': 'Check plants often, use natural sprays, and remove weak plants that attract pests.',
-            'Spider Mites': 'Keep humidity higher, inspect plants regularly, and remove dust or webs from leaves.',
-            'Whitefly Infestation': 'Use sticky traps, remove weak plants, and keep leaves clean and dry.',
-        }
-        return prevention.get(
-            disease_name,
-            'Keep plants strong with clean soil, good spacing, clean water, and regular checks for pests or disease.'
-        )
-    
-    @staticmethod
-    def get_animal_treatment(disease_name: str) -> str:
-        """Get treatment recommendations for animal disease/pest"""
-        treatments = {
-            'Tick Infestation': 'Use approved tick drops or sprays. Remove ticks by hand when possible and ask a vet for the right medicine.',
-            'Mite Infestation': 'Treat with mite medicine or dips. Clean bedding and treat all animals in contact.',
-            'Foot and Mouth Disease': 'Isolate sick animals and call a vet immediately. Clean the area and do not move the herd.',
-            'Mastitis': 'Keep the udder clean and use medicine from a vet. Milk the animal regularly and use warm compresses.',
-            'Scabies': 'Use skin treatment medicine. Clean the animal house and treat all animals that touched the sick one.',
-            'Coccidiosis': 'Give medicine for gut parasites. Keep feed and water clean and change bedding often.',
-            'Bloat': 'This is an emergency. Contact a vet quickly and do not wait. The animal needs help to release gas.',
-            'Worm Infection': 'Give deworming medicine as directed. Keep grazing areas clean and dry.',
-            'Skin Infection': 'Clean the affected skin and use medicine from a vet. Keep the area dry and separate sick animals.',
-        }
-        return treatments.get(
-            disease_name,
-            'If not listed, keep animals clean, feed them well, check them every day, and call your local vet for the best treatment plan.'
-        )
-    
-    @staticmethod
-    def get_animal_prevention(disease_name: str) -> str:
-        """Get prevention recommendations for animal disease/pest"""
-        prevention = {
-            'Tick Infestation': 'Check animals often for ticks. Keep housing clean. Use prevention drops or collars regularly.',
-            'Mite Infestation': 'Keep bedding clean and dry. Examine animals often and avoid crowding.',
-            'Foot and Mouth Disease': 'Do not mix new animals with the herd before checking them. Keep visitors and vehicles away from your farm.',
-            'Mastitis': 'Wash hands before milking. Keep udders clean and dry. Use clean tools and reduce stress.',
-            'Scabies': 'Keep animals clean and separate sick animals. Check for itching and scabs often.',
-            'Coccidiosis': 'Keep young animals in a dry, clean place. Use clean feed and water and avoid overcrowding.',
-            'Bloat': 'Feed slowly and avoid too much wet grass at once. Give good roughage and watch animals after grazing.',
-            'Worm Infection': 'Use clean water and keep grazing areas dry. Deworm animals when needed.',
-            'Skin Infection': 'Keep skin clean and dry. Separate sick animals and avoid sharing bedding.',
-        }
-        return prevention.get(
-            disease_name,
-            'If this is not listed, keep animals clean, feed them well, separate sick animals, and contact your local vet or animal health officer for advice.'
-        )
     
     @staticmethod
     def detect(image_file, subject_type: str, mode: str = 'mock') -> dict:
@@ -411,10 +246,11 @@ class RealMLDetector:
             predictions = cls.MODEL.predict(image_array)
             label_index = int(np.argmax(predictions, axis=-1)[0])
 
-            labels = list(MockMLDetector.PLANT_DISEASES.keys()) if subject_type == 'plant' else list(MockMLDetector.ANIMAL_DISEASES.keys())
-            disease_name = labels[label_index % len(labels)]
+            # Use comprehensive database for labels
+            labels = MockMLDetector.PLANT_DISEASES_LIST if subject_type == 'plant' else MockMLDetector.ANIMAL_DISEASES_LIST
+            disease_info = labels[label_index % len(labels)]
+            disease_name = disease_info['name']
 
-            disease_info = MockMLDetector.PLANT_DISEASES[disease_name] if subject_type == 'plant' else MockMLDetector.ANIMAL_DISEASES[disease_name]
             confidence = round(float(np.max(predictions) * 100), 1)
 
             try:
@@ -426,10 +262,11 @@ class RealMLDetector:
                 'disease_name': disease_name,
                 'disease': disease,
                 'confidence': confidence,
-                'severity': disease_info['severity'],
-                'treatment': MockMLDetector.get_plant_treatment(disease_name) if subject_type == 'plant' else MockMLDetector.get_animal_treatment(disease_name),
-                'prevention': MockMLDetector.get_plant_prevention(disease_name) if subject_type == 'plant' else MockMLDetector.get_animal_prevention(disease_name),
-                'affected_species': disease_info['affected_species'],
+                'severity': disease_info.get('severity', 'medium'),
+                'treatment': disease_info.get('treatment', 'Consult with a professional.'),
+                'prevention': disease_info.get('prevention', 'Maintain good practices.'),
+                'affected_species': disease_info.get('crops' if subject_type == 'plant' else 'species', []),
+                'symptoms': disease_info.get('symptoms', []),
             }
         except Exception:
             return None

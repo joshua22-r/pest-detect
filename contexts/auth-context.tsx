@@ -20,6 +20,9 @@ export interface AuthContextType {
   register: (username: string, email: string, password: string, first_name?: string, last_name?: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<void>;
+  confirmPasswordReset: (token: string, newPassword: string) => Promise<void>;
+  socialLogin: (provider: 'google' | 'facebook', accessToken: string, tokenType?: 'access_token' | 'id_token' | 'credential') => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -130,6 +133,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const requestPasswordReset = async (email: string) => {
+    try {
+      await apiClient.requestPasswordReset(email);
+    } catch (error) {
+      console.error('[Auth] Password reset request error:', error);
+      throw error instanceof Error ? error : new Error((error as any)?.message || 'Password reset request failed');
+    }
+  };
+
+  const confirmPasswordReset = async (token: string, newPassword: string) => {
+    try {
+      await apiClient.confirmPasswordReset(token, newPassword);
+    } catch (error) {
+      console.error('[Auth] Password reset confirmation error:', error);
+      throw error instanceof Error ? error : new Error((error as any)?.message || 'Password reset confirmation failed');
+    }
+  };
+
+  const socialLogin = async (provider: 'google' | 'facebook', accessToken: string, tokenType?: 'access_token' | 'id_token' | 'credential') => {
+    setIsLoading(true);
+    try {
+      const response = await apiClient.socialLogin(provider, accessToken, tokenType);
+      setUser(response.user);
+
+      // Fetch full profile
+      const profileData = await apiClient.getCurrentUser();
+      setProfile(profileData);
+
+      // Redirect based on user type
+      if (profileData.user_type === 'admin') {
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard';
+        }, 100);
+      } else {
+        setTimeout(() => {
+          window.location.href = '/predict';
+        }, 100);
+      }
+    } catch (error) {
+      console.error('[Auth] Social login error:', error);
+      throw error instanceof Error ? error : new Error((error as any)?.message || 'Social login failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -141,6 +190,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         register,
         logout,
         refreshUser,
+        requestPasswordReset,
+        confirmPasswordReset,
+        socialLogin,
       }}
     >
       {children}

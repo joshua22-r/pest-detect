@@ -1,26 +1,69 @@
 services:
+  # PostgreSQL Database
+  - type: pserv
+    name: bioguard-db
+    env: postgres
+    ipAllowList: []
+    plan: free
+    dbName: pestdetect
+    user: pestdetect_user
+
+  # Django Backend
   - type: web
     name: bioguard-backend
     env: python
     region: oregon
     plan: free
-    buildCommand: pip install -r backend/requirements.txt && cd backend && python manage.py migrate && python manage.py collectstatic --noinput && python manage.py shell < seed_data.py
-    startCommand: cd backend && gunicorn config.wsgi:application
+    runtime: python-3.10
+    buildCommand: >
+      pip install -r backend/requirements.txt &&
+      cd backend &&
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput --clear &&
+      python manage.py shell < seed_data.py
+    startCommand: cd backend && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --timeout 120
     envVars:
       - key: DEBUG
         value: false
-      - key: PYTHON_VERSION
-        value: "3.10"
+      - key: ENVIRONMENT
+        value: production
+      - key: USE_HTTPS
+        value: true
       - key: SECRET_KEY
         generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.10"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bioguard-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        value: "bioguard-backend.onrender.com,localhost"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://bioguard-frontend.onrender.com,http://localhost:3000"
+      - key: FRONTEND_URL
+        value: "https://bioguard-frontend.onrender.com"
+      - key: ADMIN_EMAIL
+        value: "admin@example.com"
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: JOSH_EMAIL
+        value: "josh@example.com"
+      - key: JOSH_PASSWORD
+        sync: false
 
+  # Next.js Frontend
   - type: web
     name: bioguard-frontend
     env: node
     region: oregon
     plan: free
-    buildCommand: npm install && npm run build
+    runtime: node-18
+    buildCommand: npm install --legacy-peer-deps && npm run build
     startCommand: npm start
+    healthCheckPath: /
     envVars:
       - key: NODE_ENV
         value: production

@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import (
     Plant, Animal, Disease, DetectionResult, 
-    UserProfile, SystemStatistics, Trial, Subscription, Payment
+    UserProfile, SystemStatistics, Trial, Subscription, Payment,
+    MFASettings, AuditLog, UserSession, Role, Permission, UserRole, RolePermission
 )
 
 
@@ -131,3 +132,77 @@ class PaymentSerializer(serializers.ModelSerializer):
             'id', 'subscription', 'user', 'username', 'user_email', 'amount',
             'payment_method', 'mobile_number', 'status', 'transaction_id', 'created_at', 'updated_at'
         ]
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ['id', 'name', 'description', 'is_active', 'created_at', 'updated_at']
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename', 'permission_type', 'resource_type', 'description', 'is_active', 'created_at', 'updated_at']
+
+
+class UserRoleSerializer(serializers.ModelSerializer):
+    role_name = serializers.CharField(source='role.name', read_only=True)
+    assigned_by_username = serializers.CharField(source='assigned_by.username', read_only=True)
+    
+    class Meta:
+        model = UserRole
+        fields = [
+            'id', 'user', 'role', 'role_name', 'assigned_by', 'assigned_by_username',
+            'assigned_at', 'expires_at', 'is_active'
+        ]
+        read_only_fields = ['id', 'assigned_at']
+
+
+class RolePermissionSerializer(serializers.ModelSerializer):
+    permission_name = serializers.CharField(source='permission.name', read_only=True)
+    permission_codename = serializers.CharField(source='permission.codename', read_only=True)
+    
+    class Meta:
+        model = RolePermission
+        fields = ['id', 'role', 'permission', 'permission_name', 'permission_codename', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
+
+class MFASettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MFASettings
+        fields = ['mfa_enabled', 'mfa_method', 'phone_number', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+
+
+class AuditLogSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    
+    class Meta:
+        model = AuditLog
+        fields = [
+            'id', 'user', 'username', 'action_type', 'description', 
+            'ip_address', 'user_agent', 'metadata', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
+
+
+class UserSessionSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    is_current_session = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = UserSession
+        fields = [
+            'id', 'username', 'session_key', 'ip_address', 'user_agent', 
+            'device_info', 'last_activity', 'created_at', 'is_current_session'
+        ]
+        read_only_fields = ['id', 'created_at', 'last_activity']
+    
+    def get_is_current_session(self, obj):
+        """Check if this is the current user's session"""
+        request = self.context.get('request')
+        if request and hasattr(request, 'session'):
+            return obj.session_key == request.session.session_key
+        return False

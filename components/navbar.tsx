@@ -11,12 +11,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, Leaf, LogOut, User, Zap, ImagePlus, History } from 'lucide-react';
+import { Menu, X, Leaf, LogOut, User, Zap, ImagePlus, History, Settings } from 'lucide-react';
 
 export function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Generate user initials for avatar
+  const getUserInitials = () => {
+    if (user?.first_name && user?.last_name) {
+      return `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`.toUpperCase();
+    } else if (user?.first_name) {
+      return user.first_name.charAt(0).toUpperCase();
+    } else if (user?.username) {
+      return user.username.charAt(0).toUpperCase();
+    }
+    return 'U';
+  };
+
+  const getUserDisplayName = () => {
+    if (user?.first_name) {
+      return user.first_name;
+    }
+    return user?.username || 'User';
+  };
 
   const handleLogout = () => {
     logout();
@@ -71,12 +90,19 @@ export function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2 text-gray-700 hover:text-green-600 hover:bg-green-50 transition-colors"
+                    className="flex items-center gap-2 text-gray-700 hover:text-green-600 hover:bg-green-50 transition-colors p-2"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 via-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
+                      <span className="text-white font-bold text-sm">
+                        {getUserInitials()}
+                      </span>
                     </div>
-                    <span className="hidden sm:inline font-medium">{user?.first_name || user?.username}</span>
+                    <div className="hidden sm:flex flex-col items-start">
+                      <span className="font-semibold text-sm">{getUserDisplayName()}</span>
+                      <span className="text-xs text-gray-500 capitalize">
+                        {user?.user_type || 'user'}
+                      </span>
+                    </div>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
@@ -84,6 +110,12 @@ export function Navbar() {
                     <Link href="/profile" className="flex items-center">
                       <User className="w-4 h-4 mr-2" />
                       Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings" className="flex items-center">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
                     </Link>
                   </DropdownMenuItem>
                   {user?.role === 'admin' && (

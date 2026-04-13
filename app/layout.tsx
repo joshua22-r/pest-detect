@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { AuthProvider } from '@/contexts/auth-context'
+import { ThemeProvider } from '@/components/theme-provider'
 import { Navbar } from '@/components/navbar'
+import { ServiceWorkerProvider } from '@/components/service-worker-provider'
 import { Toaster } from 'sonner'
 import './globals.css'
 
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
   title: 'PlantGuard - AI Plant Disease Detection',
   description: 'Detect plant diseases using AI-powered image analysis. Get instant diagnosis and treatment recommendations.',
   generator: 'v0.app',
+  manifest: '/manifest.json',
   icons: {
     icon: [
       {
@@ -37,13 +40,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className="font-sans antialiased bg-gray-50">
-        <AuthProvider>
-          <Navbar />
-          {children}
-          <Toaster />
-        </AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <ServiceWorkerProvider />
+            <Navbar />
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
