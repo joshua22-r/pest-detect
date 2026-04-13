@@ -277,3 +277,10 @@ INFO 2026-04-13 19:22:53,764 autoreload 10624 14620 C:\Users\joshu\Desktop\pest 
 INFO 2026-04-13 19:22:57,962 autoreload 19988 15464 Watching for file changes with StatReloader
 INFO 2026-04-13 19:28:08,063 autoreload 19988 15464 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
 INFO 2026-04-13 19:28:13,536 autoreload 14068 17452 Watching for file changes with StatReloader
+INFO 2026-04-14 00:32:25,641 autoreload 4352 7656 Watching for file changes with StatReloader
+ERROR 2026-04-14 00:33:26,358 log 4352 14428 Service Unavailable: /
+ERROR 2026-04-14 00:33:27,500 log 4352 14420 Service Unavailable: /
+WARNING 2026-04-14 00:33:31,509 log 4352 14420 Not Found: /favicon.ico
+INFO 2026-04-14 00:34:46,208 autoreload 4352 7656 C:\Users\joshu\AppData\Local\Programs\Python\Python310\Lib\site-packages\cryptography\exceptions.py changed, reloading.
+INFO 2026-04-14 00:34:54,735 autoreload 2708 13636 Watching for file changes with StatReloader
+INFO 2026-04-14 00:38:43,604 autoreload 12408 11896 Watching for file changes with StatReloader
