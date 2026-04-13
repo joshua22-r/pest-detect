@@ -284,3 +284,7 @@ WARNING 2026-04-14 00:33:31,509 log 4352 14420 Not Found: /favicon.ico
 INFO 2026-04-14 00:34:46,208 autoreload 4352 7656 C:\Users\joshu\AppData\Local\Programs\Python\Python310\Lib\site-packages\cryptography\exceptions.py changed, reloading.
 INFO 2026-04-14 00:34:54,735 autoreload 2708 13636 Watching for file changes with StatReloader
 INFO 2026-04-14 00:38:43,604 autoreload 12408 11896 Watching for file changes with StatReloader
+ERROR 2026-04-14 00:41:44,186 log 12408 13196 Service Unavailable: /
+WARNING 2026-04-14 00:41:46,758 log 12408 13196 Not Found: /favicon.ico
+INFO 2026-04-14 00:45:55,337 views 12408 13920 Admin josh updated user test_google_8989_google (ID: 4): user_type: "farmer" -> "veterinarian"
+WARNING 2026-04-14 00:46:05,318 views 12408 13920 Admin josh deleted user test_facebook_6635_facebook (ID: 11)

@@ -1,2 +1,0 @@
-release: cd backend && python manage.py migrate --noinput && python manage.py collectstatic --noinput
-web: gunicorn config.wsgi:application --chdir backend --bind 0.0.0.0:$PORT --timeout 120 --access-logfile -
