@@ -36,7 +36,7 @@ if ENVIRONMENT == 'production':
 
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1,bioguard-backend.onrender.com,bioguard-backend-7vik.onrender.com',
+    default='localhost,127.0.0.1,bioguard-backend.onrender.com,bioguard-backend-7vik.onrender.com,*.onrender.com',
     cast=lambda v: [s.strip() for s in v.split(',')],
 )
 
