@@ -260,7 +260,7 @@ class APIClient {
 
   async login(username: string, password: string): Promise<AuthResponse> {
     console.log('[API Client] Attempting login for:', username);
-    console.log('[API Client] API URL:', API_BASE_URL);
+    console.log('[API Client] API URL:', this.baseURL);
     console.log('[API Client] Request payload:', { username, password });
 
     try {
