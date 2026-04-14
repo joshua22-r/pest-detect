@@ -288,3 +288,5 @@ ERROR 2026-04-14 00:41:44,186 log 12408 13196 Service Unavailable: /
 WARNING 2026-04-14 00:41:46,758 log 12408 13196 Not Found: /favicon.ico
 INFO 2026-04-14 00:45:55,337 views 12408 13920 Admin josh updated user test_google_8989_google (ID: 4): user_type: "farmer" -> "veterinarian"
 WARNING 2026-04-14 00:46:05,318 views 12408 13920 Admin josh deleted user test_facebook_6635_facebook (ID: 11)
+WARNING 2026-04-14 11:24:38,623 log 12408 14720 Unauthorized: /api/auth/user/
+ERROR 2026-04-14 11:25:21,009 log 12408 17532 Service Unavailable: /

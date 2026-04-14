@@ -9,6 +9,10 @@ const nextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  trailingSlash: true,
+  experimental: {
+    disableOptimizedLoading: true,
+  },
 }
 
 if (process.env.NODE_ENV === 'development') {

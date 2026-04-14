@@ -29,9 +29,7 @@ function getApiBaseUrl() {
   return 'http://localhost:8000/api';
 }
 
-const API_BASE_URL = getApiBaseUrl();
-
-console.log('[API Client] Initialized with API_BASE_URL:', API_BASE_URL);
+console.log('[API Client] Initialization deferred until first API request');
 
 export interface AuthResponse {
   user: {
@@ -104,8 +102,8 @@ export class APIError extends Error {
 class APIClient {
   private baseURL: string;
 
-  constructor(baseURL: string = API_BASE_URL) {
-    this.baseURL = baseURL;
+  constructor(baseURL?: string) {
+    this.baseURL = baseURL ?? getApiBaseUrl();
   }
 
   private getToken(): string | null {
