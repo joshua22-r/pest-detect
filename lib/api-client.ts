@@ -1,7 +1,35 @@
 // Django Backend API Client
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:8000/api');
+const IS_BROWSER = typeof window !== 'undefined';
+
+function getApiBaseUrl() {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'NEXT_PUBLIC_API_URL is required in production. ' +
+        'Set NEXT_PUBLIC_API_URL to your backend API base URL in Vercel environment variables.'
+    );
+  }
+
+  if (IS_BROWSER) {
+    const fallback = `${window.location.origin}/api`;
+    console.warn(
+      '[API Client] NEXT_PUBLIC_API_URL is not configured. Falling back to',
+      fallback,
+      'For production, set NEXT_PUBLIC_API_URL to your backend API base URL.'
+    );
+    return fallback;
+  }
+
+  console.warn(
+    '[API Client] NEXT_PUBLIC_API_URL is not configured. Using localhost fallback for development.'
+  );
+  return 'http://localhost:8000/api';
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 console.log('[API Client] Initialized with API_BASE_URL:', API_BASE_URL);
 
