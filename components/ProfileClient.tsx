@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { User, Mail, Lock, Calendar, Leaf } from 'lucide-react';
+import { User, Mail, Lock, Calendar, Leaf, Loader } from 'lucide-react';
 
 export default function ProfileClient() {
-  const { user, profile } = useAuth();
+  const router = useRouter();
+  const { user, profile, isLoading } = useAuth();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const { toast } = useToast();
 
   const displayName = [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.username || '';
@@ -102,6 +105,29 @@ export default function ProfileClient() {
       setIsSaving(false);
     }
   };
+
+  // Check authentication
+  useEffect(() => {
+    if (!isLoading && !user) {
+      setIsRedirecting(true);
+      router.push('/auth/login?from=/profile');
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading || isRedirecting) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-green-600" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

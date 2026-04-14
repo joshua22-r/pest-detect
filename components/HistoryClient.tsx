@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Search, Calendar, TrendingUp, Trash2, Eye, Leaf, Zap } from 'lucide-react';
+import { Search, Calendar, TrendingUp, Trash2, Eye, Leaf, Zap, Loader } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 
 interface ScanRecord {
@@ -19,6 +21,9 @@ interface ScanRecord {
 }
 
 export default function HistoryClient() {
+  const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [scans, setScans] = useState<ScanRecord[]>([]);
   const [filteredScans, setFilteredScans] = useState<ScanRecord[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,6 +32,14 @@ export default function HistoryClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedScan, setSelectedScan] = useState<ScanRecord | null>(null);
   const { toast } = useToast();
+
+  // Check authentication
+  useEffect(() => {
+    if (!authLoading && !user) {
+      setIsRedirecting(true);
+      router.push('/auth/login?from=/history');
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     const loadScans = async () => {
@@ -127,6 +140,21 @@ export default function HistoryClient() {
     medium: 'text-orange-600 bg-orange-50 border-orange-200',
     high: 'text-red-600 bg-red-50 border-red-200',
   };
+
+  if (authLoading || isRedirecting) {
+    return (
+      <div className="min-h-[calc(100vh-64px)] flex items-center justify-center py-8 px-4">
+        <div className="text-center">
+          <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-green-600" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   if (isLoading) {
     return (

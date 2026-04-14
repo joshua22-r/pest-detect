@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
+import { useAuth } from '@/contexts/auth-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -9,7 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Monitor, Sun, Moon, Palette, Eye, Layout, Save, RotateCcw } from 'lucide-react';
+import { Monitor, Sun, Moon, Palette, Eye, Layout, Save, RotateCcw, Loader } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 type DisplayMode = 'light' | 'dark' | 'system';
@@ -35,10 +37,21 @@ const defaultSettings: DisplaySettings = {
 };
 
 export default function SettingsClient() {
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const { user, isLoading } = useAuth();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [settings, setSettings] = useState<DisplaySettings>(defaultSettings);
   const [hasChanges, setHasChanges] = useState(false);
+
+  // Check authentication
+  useEffect(() => {
+    if (!isLoading && !user) {
+      setIsRedirecting(true);
+      router.push('/auth/login?from=/settings');
+    }
+  }, [user, isLoading, router]);
 
   useEffect(() => {
     const savedSettings = localStorage.getItem('display-settings');
@@ -105,6 +118,21 @@ export default function SettingsClient() {
       case 'large': return 'Larger text for better accessibility';
     }
   };
+
+  if (isLoading || isRedirecting) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">

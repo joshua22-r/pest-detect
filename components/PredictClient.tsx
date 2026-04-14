@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 import { ImageUpload, SubjectType } from '@/components/image-upload';
 import { DetectionResults, DetectionResult } from '@/components/detection-results';
 import { Card } from '@/components/ui/card';
@@ -8,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { TrialButton } from '@/components/trial-button';
 import { SubscriptionModal } from '@/components/subscription-modal';
-import { Leaf, LogIn, Lock } from 'lucide-react';
+import { Leaf, LogIn, Lock, Loader } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 import Link from 'next/link';
 
@@ -16,6 +18,9 @@ const DEMO_TRIAL_KEY = 'pest_detect_demo_trials';
 const MAX_DEMO_TRIALS = 5;
 
 export default function PredictClient() {
+  const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [subjectType, setSubjectType] = useState<SubjectType>('plant');
   const [modelMode, setModelMode] = useState<'mock' | 'real'>('real');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -30,6 +35,14 @@ export default function PredictClient() {
   const [isDemo, setIsDemo] = useState(false);
   const [demoTrialsUsed, setDemoTrialsUsed] = useState(0);
   const { toast } = useToast();
+
+  // Check authentication for page access
+  useEffect(() => {
+    if (!authLoading && !user) {
+      setIsRedirecting(true);
+      router.push('/auth/login?from=/predict');
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     checkAuthentication();
@@ -238,6 +251,21 @@ export default function PredictClient() {
       setIsSaving(false);
     }
   };
+
+  if (authLoading || isRedirecting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-100 via-blue-50 to-purple-100 flex items-center justify-center">
+        <div className="text-center">
+          <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-green-600" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-[calc(100vh-64px)] py-8 px-4 bg-gradient-to-br from-green-100 via-blue-50 to-purple-100">
