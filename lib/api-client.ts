@@ -7,10 +7,13 @@ function getApiBaseUrl() {
   }
 
   if (process.env.NODE_ENV === 'production') {
-    throw new Error(
-      'NEXT_PUBLIC_API_URL is required in production. ' +
-        'Set NEXT_PUBLIC_API_URL to your backend API base URL in Vercel environment variables.'
+    const fallback = 'https://bioguard-backend-7vik.onrender.com/api';
+    console.warn(
+      '[API Client] NEXT_PUBLIC_API_URL is not configured in production. Falling back to',
+      fallback,
+      'Please set NEXT_PUBLIC_API_URL in Vercel environment variables to your backend API URL.'
     );
+    return fallback;
   }
 
   if (IS_BROWSER) {
