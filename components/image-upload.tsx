@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Upload, Camera, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { CameraModal } from '@/components/camera-modal';
 
 export type SubjectType = 'plant' | 'animal';
 
@@ -16,9 +17,9 @@ interface ImageUploadProps {
 
 export function ImageUpload({ onImageSelect, isLoading = false, subjectType, onSubjectTypeChange }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>('');
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const handleFileSelect = (file: File | null) => {
     if (!file) return;
@@ -44,6 +45,11 @@ export function ImageUpload({ onImageSelect, isLoading = false, subjectType, onS
       setPreview(reader.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleCameraCapture = (file: File) => {
+    handleFileSelect(file);
+    setIsCameraOpen(false);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -164,22 +170,29 @@ export function ImageUpload({ onImageSelect, isLoading = false, subjectType, onS
         <Button
           variant="outline"
           className="border-blue-600 text-blue-600 hover:bg-blue-50"
-          onClick={() => cameraInputRef.current?.click()}
+          onClick={() => setIsCameraOpen(true)}
           disabled={isLoading}
         >
           <Camera className="w-4 h-4 mr-2" />
           Take Photo
         </Button>
         <input
-          ref={cameraInputRef}
+          ref={fileInputRef}
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
           className="hidden"
           disabled={isLoading}
         />
       </div>
+
+      {/* Camera Modal */}
+      <CameraModal
+        isOpen={isCameraOpen}
+        onClose={() => setIsCameraOpen(false)}
+        onPhotoCapture={handleCameraCapture}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

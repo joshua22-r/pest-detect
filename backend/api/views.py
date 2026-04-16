@@ -1472,9 +1472,11 @@ def create_subscription(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    if not re.match(r'^\+?\d{9,15}$', mobile_number):
+    # Validate Uganda mobile number formats
+    # Valid formats: 0700123456, +256700123456, 256700123456
+    if not re.match(r'^(\+?256|0)?\d{9}$|^(\+?256|0)\d{7,15}$', mobile_number):
         return Response(
-            {'error': 'Invalid mobile number format. Use international digits only.'},
+            {'error': 'Invalid mobile number format. Use format like 0700123456 or +256700123456'},
             status=status.HTTP_400_BAD_REQUEST
         )
 

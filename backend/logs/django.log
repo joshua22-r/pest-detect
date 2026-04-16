@@ -290,3 +290,24 @@ INFO 2026-04-14 00:45:55,337 views 12408 13920 Admin josh updated user test_goog
 WARNING 2026-04-14 00:46:05,318 views 12408 13920 Admin josh deleted user test_facebook_6635_facebook (ID: 11)
 WARNING 2026-04-14 11:24:38,623 log 12408 14720 Unauthorized: /api/auth/user/
 ERROR 2026-04-14 11:25:21,009 log 12408 17532 Service Unavailable: /
+INFO 2026-04-14 21:19:20,076 autoreload 13744 1184 Watching for file changes with StatReloader
+INFO 2026-04-15 18:53:53,898 autoreload 3996 5020 Watching for file changes with StatReloader
+WARNING 2026-04-15 18:59:07,161 log 3996 8056 Unauthorized: /api/auth/login/
+INFO 2026-04-16 10:28:53,419 autoreload 12544 15264 Watching for file changes with StatReloader
+WARNING 2026-04-16 10:32:20,216 log 12544 10116 Unauthorized: /api/auth/user/
+INFO 2026-04-16 10:46:15,622 autoreload 12544 15264 C:\Users\joshu\Desktop\pest detect\backend\api\views.py changed, reloading.
+INFO 2026-04-16 10:46:23,462 autoreload 12528 14604 Watching for file changes with StatReloader
+INFO 2026-04-16 10:46:35,458 autoreload 12528 14604 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:46:38,491 autoreload 10252 11768 Watching for file changes with StatReloader
+INFO 2026-04-16 10:46:53,615 autoreload 10252 11768 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:46:56,244 autoreload 14120 11072 Watching for file changes with StatReloader
+INFO 2026-04-16 10:47:07,779 autoreload 14120 11072 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:47:10,461 autoreload 15256 13988 Watching for file changes with StatReloader
+INFO 2026-04-16 10:47:44,277 autoreload 15256 13988 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:47:47,284 autoreload 12592 9064 Watching for file changes with StatReloader
+INFO 2026-04-16 10:48:06,393 autoreload 12592 9064 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:48:09,617 autoreload 6232 2844 Watching for file changes with StatReloader
+INFO 2026-04-16 10:48:18,095 autoreload 6232 2844 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:48:20,990 autoreload 14828 11060 Watching for file changes with StatReloader
+INFO 2026-04-16 10:51:50,283 autoreload 14828 11060 C:\Users\joshu\Desktop\pest detect\backend\api\mobile_money_service.py changed, reloading.
+INFO 2026-04-16 10:51:52,950 autoreload 8412 10064 Watching for file changes with StatReloader

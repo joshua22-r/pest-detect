@@ -9,10 +9,10 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { TrialButton } from '@/components/trial-button';
+import { TrialCounter } from '@/components/trial-counter';
 import { SubscriptionModal } from '@/components/subscription-modal';
-import { Leaf, LogIn, Lock, Loader } from 'lucide-react';
+import { Leaf, Loader } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
-import Link from 'next/link';
 
 const DEMO_TRIAL_KEY = 'pest_detect_demo_trials';
 const MAX_DEMO_TRIALS = 5;
@@ -156,10 +156,26 @@ export default function PredictClient() {
         setResult(transformedResult);
         incrementDemoTrial();
 
-        toast({
-          title: 'Demo Analysis Complete!',
-          description: `Demo attempt ${demoTrialsUsed + 1}/${MAX_DEMO_TRIALS}. Login to save results and use unlimited scans.`,
-        });
+        const remainingTrials = MAX_DEMO_TRIALS - (demoTrialsUsed + 1);
+        
+        if (remainingTrials <= 0) {
+          toast({
+            title: '🔒 Trial Limit Reached!',
+            description: 'You have used all 5 free trials. Subscribe now to continue scanning unlimited pictures.',
+            variant: 'destructive',
+          });
+          setTimeout(() => setIsSubscriptionOpen(true), 500);
+        } else if (remainingTrials <= 2) {
+          toast({
+            title: `⚠️ Only ${remainingTrials} trial${remainingTrials === 1 ? '' : 's'} left!`,
+            description: `You have ${remainingTrials} free scan${remainingTrials === 1 ? '' : 's'} remaining. Consider subscribing soon.`,
+          });
+        } else {
+          toast({
+            title: '✅ Demo Scan Complete!',
+            description: `Remaining trials: ${remainingTrials}/${MAX_DEMO_TRIALS}. Login to save results and get unlimited scans.`,
+          });
+        }
       } catch (error) {
         console.error('Demo analysis error:', error);
         toast({
@@ -272,39 +288,12 @@ export default function PredictClient() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           {isDemo ? (
-            <Card className={`p-4 ${demoTrialsUsed >= MAX_DEMO_TRIALS ? 'bg-green-50 border-green-200' : 'bg-green-50 border-green-200'}`}>
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">🆓</div>
-                  <div>
-                    <h3 className="font-bold text-green-900">
-                      {demoTrialsUsed >= MAX_DEMO_TRIALS ? 'Demo Trial Ended' : 'Demo Mode'}
-                    </h3>
-                    <p className="text-sm text-green-700">
-                      {demoTrialsUsed >= MAX_DEMO_TRIALS
-                        ? 'You have used all your demo trials'
-                        : `Free trials remaining: ${MAX_DEMO_TRIALS - demoTrialsUsed}/${MAX_DEMO_TRIALS}`}
-                    </p>
-                  </div>
-                </div>
-                {demoTrialsUsed >= MAX_DEMO_TRIALS ? (
-                  <Button
-                    onClick={() => setIsSubscriptionOpen(true)}
-                    className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
-                  >
-                    <Lock className="w-4 h-4" />
-                    Subscribe Now
-                  </Button>
-                ) : (
-                  <Link href="/auth/login">
-                    <Button className="bg-green-600 hover:bg-green-700 flex items-center gap-2">
-                      <LogIn className="w-4 h-4" />
-                      Login to Save & Subscribe
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            </Card>
+            <TrialCounter
+              trialsUsed={demoTrialsUsed}
+              maxTrials={MAX_DEMO_TRIALS}
+              onSubscribe={() => setIsSubscriptionOpen(true)}
+              isDemo={true}
+            />
           ) : (
             <TrialButton onSubscriptionOpen={() => setIsSubscriptionOpen(true)} />
           )}

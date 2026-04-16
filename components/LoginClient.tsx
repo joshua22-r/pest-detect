@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -10,29 +10,66 @@ import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Spinner } from '@/components/ui/spinner';
 
+// Type declarations for global objects
+declare global {
+  interface Window {
+    google?: any;
+    FB?: any;
+    fbAsyncInit?: () => void;
+  }
+}
+
 export function LoginClient() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<'google' | 'facebook' | null>(null);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const router = useRouter();
-  const { login, socialLogin } = useAuth();
+  const { login, socialLogin, user, isLoading: authIsLoading } = useAuth();
   const { toast } = useToast();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!authIsLoading) {
+      if (user) {
+        // User is already logged in, redirect to dashboard
+        router.push('/predict');
+      }
+      setIsAuthChecking(false);
+    }
+  }, [user, authIsLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate input
+    if (!username.trim()) {
+      toast({
+        title: 'Validation error',
+        description: 'Please enter your username or email',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (!password.trim()) {
+      toast({
+        title: 'Validation error',
+        description: 'Please enter your password',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       await login(username, password);
-      toast({
-        title: 'Login successful',
-        description: 'Welcome back!',
-      });
-      // Redirection is now handled in the auth context
+      // Toast and redirection are now handled in the auth context
     } catch (error) {
-      console.error('[v0] Login error:', error);
-      const message = error instanceof Error ? error.message : (typeof error === 'object' && error !== null ? JSON.stringify(error) : 'Please check your credentials');
+      console.error('[LoginClient] Login error:', error);
+      const message = error instanceof Error ? error.message : (typeof error === 'object' && error !== null ? (error as any)?.description || JSON.stringify(error) : 'Please check your credentials');
       toast({
         title: 'Login failed',
         description: message,
@@ -49,61 +86,157 @@ export function LoginClient() {
       if (provider === 'google') {
         const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
-        // Check if Google Client ID is properly configured
         if (!googleClientId || googleClientId.includes('your-google') || googleClientId.length < 20) {
           toast({
             title: 'Google Sign-In not configured',
-            description: 'Please configure NEXT_PUBLIC_GOOGLE_CLIENT_ID in your environment variables',
+            description: 'Please configure NEXT_PUBLIC_GOOGLE_CLIENT_ID in environment variables',
             variant: 'destructive',
           });
           setSocialLoading(null);
           return;
         }
 
-        // Initialize Google Identity Services
+        // Load Google Identity Services if not already loaded
         if (!window.google) {
-          // Load Google Identity Services script if not loaded
           await new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
           });
         }
 
-        // Initialize Google Sign-In
-        window.google.accounts.id.initialize({
-          client_id: googleClientId,
-          callback: async (response: any) => {
+        // Use OAuth popup flow
+        const redirectUri = `${window.location.origin}/auth/google-callback`;
+        const scope = encodeURIComponent('openid email profile');
+        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?
+          client_id=${googleClientId}&
+          redirect_uri=${encodeURIComponent(redirectUri)}&
+          response_type=token%20id_token&
+          scope=${scope}&
+          nonce=${Math.random().toString(36).substring(2, 15)}`;
+
+        // Open popup window
+        const width = 500;
+        const height = 600;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+
+        const popup = window.open(
+          googleAuthUrl,
+          'GoogleSignIn',
+          `width=${width},height=${height},left=${left},top=${top}`
+        );
+
+        if (!popup) {
+          toast({
+            title: 'Popup blocked',
+            description: 'Please allow popups for Google Sign-In to work',
+            variant: 'destructive',
+          });
+          setSocialLoading(null);
+          return;
+        }
+
+        // Listen for message from callback (in production, use a proper OAuth library)
+        window.addEventListener('message', async (event) => {
+          if (event.origin !== window.location.origin) return;
+
+          if (event.data.type === 'GOOGLE_LOGIN_SUCCESS') {
             try {
-              // Send the ID token to backend
-              await socialLogin('google', response.credential, 'credential');
-              toast({
-                title: 'Login successful',
-                description: 'Welcome back from Google!',
-              });
+              await socialLogin('google', event.data.credential, 'credential');
+              popup?.close();
             } catch (error) {
               console.error('Google login error:', error);
               toast({
-                title: 'Google login failed',
-                description: 'Please try again',
+                title: 'Login failed',
+                description: error instanceof Error ? error.message : 'Please try again',
                 variant: 'destructive',
               });
             } finally {
               setSocialLoading(null);
             }
-          },
+          }
         });
+      } else if (provider === 'facebook') {
+        const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
 
-        // Show Google Sign-In prompt
-        window.google.accounts.id.prompt();
+        if (!facebookAppId || facebookAppId.includes('your-facebook') || facebookAppId.length < 10) {
+          toast({
+            title: 'Facebook Sign-In not configured',
+            description: 'Please configure NEXT_PUBLIC_FACEBOOK_APP_ID in environment variables',
+            variant: 'destructive',
+          });
+          setSocialLoading(null);
+          return;
+        }
+
+        // Load Facebook SDK if not already loaded
+        if (!window.FB) {
+          await new Promise((resolve) => {
+            window.fbAsyncInit = function () {
+              FB.init({
+                appId: facebookAppId,
+                xfbml: true,
+                version: 'v18.0',
+              });
+              resolve(null);
+            };
+
+            // Load FB SDK
+            const script = document.createElement('script');
+            script.src = 'https://connect.facebook.net/en_US/sdk.js';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+          });
+        }
+
+        // Open Facebook login popup
+        const width = 500;
+        const height = 600;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+
+        FB.login(
+          async (response: any) => {
+            if (response.authResponse) {
+              try {
+                await socialLogin('facebook', response.authResponse.accessToken, 'access_token');
+                toast({
+                  title: 'Login successful',
+                  description: 'Welcome from Facebook!',
+                });
+              } catch (error) {
+                console.error('Facebook login error:', error);
+                toast({
+                  title: 'Login failed',
+                  description: error instanceof Error ? error.message : 'Please try again',
+                  variant: 'destructive',
+                });
+              } finally {
+                setSocialLoading(null);
+              }
+            } else {
+              toast({
+                title: 'Login canceled',
+                description: 'You cancelled the login process',
+                variant: 'default',
+              });
+              setSocialLoading(null);
+            }
+          },
+          { scope: 'public_profile,email', width, height, left, top }
+        );
       }
     } catch (error) {
       console.error('Social login error:', error);
       toast({
-        title: 'Social login failed',
-        description: 'Please try again',
+        title: 'Social login error',
+        description: error instanceof Error ? error.message : 'Please try again',
         variant: 'destructive',
       });
       setSocialLoading(null);
@@ -112,7 +245,13 @@ export function LoginClient() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-blue-50 to-emerald-50 px-4">
-      <Card className="w-full max-w-md p-8 shadow-lg">
+      {isAuthChecking || user ? (
+        <div className="text-center">
+          <Spinner />
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      ) : (
+        <Card className="w-full max-w-md p-8 shadow-lg">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to your account</p>
@@ -206,6 +345,7 @@ export function LoginClient() {
           </p>
         </div>
       </Card>
+      )}
     </div>
   );
 }

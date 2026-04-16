@@ -7,6 +7,7 @@ import uuid
 import hashlib
 import hmac
 import base64
+import re
 
 logger = logging.getLogger('api')
 
@@ -39,6 +40,25 @@ class MobileMoneyService:
         return base64.b64encode(signature).decode()
 
     @staticmethod
+    def _normalize_phone_number(phone_number: str) -> str:
+        """
+        Normalize Uganda phone numbers to international format (+256...)
+        Handles formats: 0700123456, +256700123456, 256700123456
+        """
+        # Remove any spaces, dashes, or other characters
+        cleaned = re.sub(r'\D', '', phone_number)
+        
+        # Handle different formats
+        if cleaned.startswith('256'):
+            return '+' + cleaned
+        elif cleaned.startswith('0'):
+            # Convert 0700123456 to +256700123456
+            return '+256' + cleaned[1:]
+        else:
+            # Assume it's already without country code, add it
+            return '+256' + cleaned
+
+    @staticmethod
     def get_headers(method='GET', url='', body=''):
         """
         Generate headers for Airtel API requests
@@ -64,6 +84,13 @@ class MobileMoneyService:
         Initiate a collection (customer pays to our account)
         """
         try:
+            # Normalize phone number and amount
+            normalized_number = MobileMoneyService._normalize_phone_number(customer_msisdn)
+            amount = int(amount) if amount else 0
+            
+            if amount <= 0:
+                raise ValueError(f"Invalid amount: {amount}. Amount must be greater than 0")
+            
             url = f"{MobileMoneyService.AIRTEL_BASE_URL}/merchant/v1/payments/"
             endpoint = "/merchant/v1/payments/"
 
@@ -72,7 +99,7 @@ class MobileMoneyService:
                 "subscriber": {
                     "country": "UG",
                     "currency": "UGX",
-                    "msisdn": customer_msisdn
+                    "msisdn": normalized_number
                 },
                 "transaction": {
                     "amount": amount,
@@ -86,7 +113,7 @@ class MobileMoneyService:
 
             if MobileMoneyService.AIRTEL_ENVIRONMENT == 'sandbox':
                 # For sandbox, simulate successful payment
-                logger.info(f"Sandbox mode: Simulating collection of {amount} UGX from {customer_msisdn}")
+                logger.info(f"Sandbox mode: Simulating collection of {amount} UGX from {normalized_number}")
                 return {
                     'status': 'success',
                     'transaction_id': f"sandbox_{reference}",
@@ -117,12 +144,19 @@ class MobileMoneyService:
         Initiate a disbursement (we pay to customer)
         """
         try:
+            # Normalize phone number and amount
+            normalized_number = MobileMoneyService._normalize_phone_number(recipient_msisdn)
+            amount = int(amount) if amount else 0
+            
+            if amount <= 0:
+                raise ValueError(f"Invalid amount: {amount}. Amount must be greater than 0")
+            
             url = f"{MobileMoneyService.AIRTEL_BASE_URL}/standard/v1/disbursements/"
             endpoint = "/standard/v1/disbursements/"
 
             payload = {
                 "payee": {
-                    "msisdn": recipient_msisdn,
+                    "msisdn": normalized_number,
                     "wallet_type": "Airtel"
                 },
                 "reference": reference,
@@ -138,7 +172,7 @@ class MobileMoneyService:
 
             if MobileMoneyService.AIRTEL_ENVIRONMENT == 'sandbox':
                 # For sandbox, simulate successful disbursement
-                logger.info(f"Sandbox mode: Simulating disbursement of {amount} UGX to {recipient_msisdn}")
+                logger.info(f"Sandbox mode: Simulating disbursement of {amount} UGX to {normalized_number}")
                 return {
                     'status': 'success',
                     'transaction_id': f"sandbox_disbursement_{reference}",

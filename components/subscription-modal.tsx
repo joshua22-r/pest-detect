@@ -58,6 +58,17 @@ export function SubscriptionModal({
       return;
     }
 
+    // Validate phone number format
+    const phoneRegex = /^(\+?256|0)?\d{9}$|^(\+?256|0)\d{7,15}$/;
+    if (!phoneRegex.test(mobileNumber)) {
+      toast({
+        title: 'Invalid phone number',
+        description: 'Please enter a valid Uganda phone number (e.g., 0700123456 or +256700123456)',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await apiClient.createSubscription({
@@ -66,17 +77,31 @@ export function SubscriptionModal({
         mobile_number: mobileNumber,
       });
 
-      setSubscriptionId(response.subscription.id);
-      setStep('success');
+      if (response && response.subscription) {
+        setSubscriptionId(response.subscription.id);
+        setStep('success');
 
-      toast({
-        title: 'Payment processed successfully!',
-        description: response.message || `Your subscription is now active`,
-      });
+        toast({
+          title: '✅ Payment processed successfully!',
+          description: response.message || `Your ${selectedPlan} subscription is now active! Payment has been sent to the target account.`,
+        });
+
+        // Call onSuccess after a short delay to let user see the success message
+        setTimeout(() => {
+          onSuccess?.();
+        }, 2000);
+      } else {
+        throw new Error('Unexpected response format from server');
+      }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Please try again';
+      console.error('Subscription error:', error);
+      
       toast({
-        title: 'Error creating subscription',
-        description: error instanceof Error ? error.message : 'Please try again',
+        title: '❌ Error creating subscription',
+        description: errorMessage.includes('Already subscribed')
+          ? 'You already have an active subscription'
+          : errorMessage,
         variant: 'destructive',
       });
     } finally {
@@ -90,9 +115,9 @@ export function SubscriptionModal({
     setPaymentMethod(null);
     setMobileNumber('');
     setSubscriptionId('');
+    setPaymentId('');
 
     onClose();
-    onSuccess?.();
   };
 
   return (
