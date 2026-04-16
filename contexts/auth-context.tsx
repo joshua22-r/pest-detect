@@ -9,6 +9,8 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
+  role?: string;
+  user_type?: string;
 }
 
 export interface AuthContextType {
@@ -41,7 +43,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Verify token by fetching current user
           const userData = await apiClient.getCurrentUser();
           setProfile(userData);
-          setUser(userData.user);
+          setUser({
+            ...userData.user,
+            user_type: userData.user_type,
+            role: userData.user_type === 'admin' ? 'admin' : 'user'
+          });
 
           // Redirect admin users to admin dashboard
           if (userData.user_type === 'admin' && window.location.pathname !== '/admin/dashboard') {
@@ -76,6 +82,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const profileData = await apiClient.getCurrentUser();
       console.log('[AuthContext] Profile data fetched:', profileData);
       setProfile(profileData);
+
+      // Update user with profile data
+      setUser({
+        ...response.user,
+        user_type: profileData.user_type,
+        role: profileData.user_type === 'admin' ? 'admin' : 'user'
+      });
 
       // Redirect based on user type
       if (profileData.user_type === 'admin') {
@@ -170,6 +183,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Fetch full profile
       const profileData = await apiClient.getCurrentUser();
       setProfile(profileData);
+
+      // Update user with profile data
+      setUser({
+        ...response.user,
+        user_type: profileData.user_type,
+        role: profileData.user_type === 'admin' ? 'admin' : 'user'
+      });
 
       // Redirect based on user type
       if (profileData.user_type === 'admin') {

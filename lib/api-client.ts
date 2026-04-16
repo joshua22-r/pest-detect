@@ -41,6 +41,8 @@ export interface AuthResponse {
     email: string;
     first_name: string;
     last_name: string;
+    role?: string;
+    user_type?: string;
   };
   access: string;
   refresh: string;
@@ -131,9 +133,12 @@ class APIClient {
     const url = `${this.baseURL}${endpoint}`;
     const token = this.getToken();
 
-    const headers: HeadersInit = {
-      ...options.headers,
-    };
+    const headers: Record<string, string> = {};
+
+    // Merge any existing headers
+    if (options.headers) {
+      Object.assign(headers, options.headers);
+    }
 
     // Only set Content-Type if we're not sending FormData
     if (!(options.body instanceof FormData)) {
@@ -364,13 +369,6 @@ class APIClient {
 
   async getAdminUsers(): Promise<any[]> {
     return this.request<any[]>('/admin/users/');
-  }
-
-  async createAdminUser(data: any): Promise<any> {
-    return this.request<any>('/admin/users/', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
   }
 
   async updateAdminUser(id: string, data: any): Promise<any> {

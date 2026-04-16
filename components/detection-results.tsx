@@ -13,6 +13,7 @@ export interface DetectionResult {
   severity: 'low' | 'medium' | 'high';
   treatment: string;
   prevention: string;
+  notes?: string;
   affectedPlants?: string[];
   affectedAnimals?: string[];
   subjectType: SubjectType;

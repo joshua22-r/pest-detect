@@ -10,15 +10,6 @@ import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Spinner } from '@/components/ui/spinner';
 
-// Type declarations for global objects
-declare global {
-  interface Window {
-    google?: any;
-    FB?: any;
-    fbAsyncInit?: () => void;
-  }
-}
-
 export function RegisterClient() {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
@@ -135,11 +126,13 @@ export function RegisterClient() {
         if (!window.FB) {
           await new Promise((resolve) => {
             window.fbAsyncInit = function () {
-              FB.init({
-                appId: facebookAppId,
-                xfbml: true,
-                version: 'v18.0',
-              });
+              if (window.FB) {
+                window.FB.init({
+                  appId: facebookAppId,
+                  xfbml: true,
+                  version: 'v18.0',
+                });
+              }
               resolve(null);
             };
 
@@ -156,25 +149,26 @@ export function RegisterClient() {
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
 
-        FB.login(
-          async (response: any) => {
-            if (response.authResponse) {
-              try {
-                await socialLogin('facebook', response.authResponse.accessToken, 'access_token');
-                toast({
-                  title: 'Signup successful',
-                  description: 'Welcome to BioGuard AI!',
-                });
-              } catch (error) {
-                console.error('Facebook signup error:', error);
-                toast({
-                  title: 'Signup failed',
-                  description: error instanceof Error ? error.message : 'Please try again',
-                  variant: 'destructive',
-                });
-              } finally {
-                setSocialLoading(null);
-              }
+        if (window.FB) {
+          window.FB.login(
+            async (response: any) => {
+              if (response.authResponse) {
+                try {
+                  await socialLogin('facebook', response.authResponse.accessToken, 'access_token');
+                  toast({
+                    title: 'Signup successful',
+                    description: 'Welcome to BioGuard AI!',
+                  });
+                } catch (error) {
+                  console.error('Facebook signup error:', error);
+                  toast({
+                    title: 'Signup failed',
+                    description: error instanceof Error ? error.message : 'Please try again',
+                    variant: 'destructive',
+                  });
+                } finally {
+                  setSocialLoading(null);
+                }
             } else {
               toast({
                 title: 'Signup canceled',
@@ -185,7 +179,8 @@ export function RegisterClient() {
             }
           },
           { scope: 'public_profile,email', width, height, left, top }
-        );
+          );
+        }
       }
     } catch (error) {
       console.error('Social signup error:', error);

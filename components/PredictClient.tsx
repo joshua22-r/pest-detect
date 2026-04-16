@@ -50,7 +50,7 @@ export default function PredictClient() {
 
   const checkAuthentication = async () => {
     try {
-      const user = await apiClient.request<any>('/auth/user/');
+      await apiClient.getCurrentUser();
       setIsAuthenticated(true);
       setIsDemo(false);
       loadTrialStatus();

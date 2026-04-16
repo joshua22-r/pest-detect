@@ -10,15 +10,6 @@ import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Spinner } from '@/components/ui/spinner';
 
-// Type declarations for global objects
-declare global {
-  interface Window {
-    google?: any;
-    FB?: any;
-    fbAsyncInit?: () => void;
-  }
-}
-
 export function LoginClient() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -178,11 +169,13 @@ export function LoginClient() {
         if (!window.FB) {
           await new Promise((resolve) => {
             window.fbAsyncInit = function () {
-              FB.init({
-                appId: facebookAppId,
-                xfbml: true,
-                version: 'v18.0',
-              });
+              if (window.FB) {
+                window.FB.init({
+                  appId: facebookAppId,
+                  xfbml: true,
+                  version: 'v18.0',
+                });
+              }
               resolve(null);
             };
 
@@ -201,20 +194,21 @@ export function LoginClient() {
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
 
-        FB.login(
-          async (response: any) => {
-            if (response.authResponse) {
-              try {
-                await socialLogin('facebook', response.authResponse.accessToken, 'access_token');
-                toast({
-                  title: 'Login successful',
-                  description: 'Welcome from Facebook!',
-                });
-              } catch (error) {
-                console.error('Facebook login error:', error);
-                toast({
-                  title: 'Login failed',
-                  description: error instanceof Error ? error.message : 'Please try again',
+        if (window.FB) {
+          window.FB.login(
+            async (response: any) => {
+              if (response.authResponse) {
+                try {
+                  await socialLogin('facebook', response.authResponse.accessToken, 'access_token');
+                  toast({
+                    title: 'Login successful',
+                    description: 'Welcome from Facebook!',
+                  });
+                } catch (error) {
+                  console.error('Facebook login error:', error);
+                  toast({
+                    title: 'Login failed',
+                    description: error instanceof Error ? error.message : 'Please try again',
                   variant: 'destructive',
                 });
               } finally {
@@ -230,7 +224,8 @@ export function LoginClient() {
             }
           },
           { scope: 'public_profile,email', width, height, left, top }
-        );
+          );
+        }
       }
     } catch (error) {
       console.error('Social login error:', error);

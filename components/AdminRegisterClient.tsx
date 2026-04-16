@@ -47,7 +47,15 @@ export function AdminRegisterClient() {
     setIsLoading(true);
 
     try {
-      await apiClient.createAdminUser(username, email, password, firstName, lastName);
+      await apiClient.createAdminUser({
+        username,
+        email,
+        password,
+        first_name: firstName,
+        last_name: lastName,
+        user_type: 'admin',
+        is_staff: true,
+      });
       toast({
         title: 'Admin user created',
         description: 'The admin user has been successfully created.',
